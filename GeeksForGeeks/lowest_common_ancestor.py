@@ -4,6 +4,21 @@ class Node:
         self.left = None
         self.right = None
 
+    def insert(self, data):
+        if self.data is None:
+            self.data = data
+        else:
+            if data < self.data:
+                if self.left is None:
+                    self.left = Node(data)
+                else:
+                    self.left.insert(data)
+            elif data > self.data:
+                if self.right is None:
+                    self.right = Node(data)
+                else:
+                    self.right.insert(data)
+
 
 def lca(node, n1, n2):
     if node is None:
@@ -17,12 +32,12 @@ def lca(node, n1, n2):
 
 
 root = Node(20)
-root.left = Node(8)
-root.right = Node(22)
-root.left.left = Node(4)
-root.left.right = Node(12)
-root.left.right.left = Node(10)
-root.left.right.right = Node(14)
+root.insert(8)
+root.insert(22)
+root.insert(4)
+root.insert(12)
+root.insert(10)
+root.insert(14)
 n1 = 10
 n2 = 14
 
