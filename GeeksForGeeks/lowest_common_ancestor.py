@@ -19,6 +19,21 @@ class Node:
                 else:
                     self.right.insert(data)
 
+    def exists(self, data):
+        if self.data is None:
+            return False
+        if self.data == data:
+            return True
+        elif data < self.data:
+            if self.left:
+                return self.left.exists(data)
+        elif data > self.data:
+            if self.right:
+                return self.right.exists(data)
+            else:
+                return False
+
+
 
 def lca(node, n1, n2):
     if node is None:
@@ -38,7 +53,9 @@ root.insert(4)
 root.insert(12)
 root.insert(10)
 root.insert(14)
-n1 = 10
-n2 = 14
+num1 = 10
+num2 = 14
 
-print(lca(root, n1, n2).data)
+# print(lca(root, num1, num2).data)
+print(root.exists(10))
+print(root.exists(123))
