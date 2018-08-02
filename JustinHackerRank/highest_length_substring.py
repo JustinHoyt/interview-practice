@@ -15,21 +15,20 @@ def highest_substr(str1, str2):
     size = len(str1)
     for i in range(size):
         for j in range(size):
-            for col in range(size):
-                for row in range(size):
-                    if row == i and col == j:
-                        print("*" + str(matrix[row][col]) + "*", end="")
-                    else:
-                        print(" " + str(matrix[row][col]) + " ", end="")
-                print()
-
-            print()
-            input()
+            # for col in range(size):
+            #     for row in range(size):
+                    # if row == i and col == j:
+                    #     print("*" + str(matrix[row][col]) + "*", end="")
+                    # else:
+                    #     print(" " + str(matrix[row][col]) + " ", end="")
+                # print()
+            # print()
+            # input()
             is_letter_used = matrix[i][j] != 0
             is_matched = str1[i] == str2[j]
 
             if i > 0:
-                matrix[i][j] = matrix[i-1][j]
+                matrix[i][j] = max(matrix[i][j], matrix[i-1][j])
 
             if is_matched:
                 if is_letter_used:
@@ -44,7 +43,9 @@ def highest_substr(str1, str2):
 
 # str1 = "shinchan"
 # str2 = "noharaaa"
-str1 = "abbcd"
-str2 = "abcdw"
+# str1 = "abbcd"
+# str2 = "abcdw"
+str1 = "abcdef"
+str2 = "fbdamn"
 
 print(highest_substr(str1, str2))
