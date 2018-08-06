@@ -1,3 +1,6 @@
+'''
+https://leetcode.com/problems/burst-balloons/description/
+'''
 def print_memo(memo):
     for item in memo:
         print(str(item) + ": " + str(memo[item]))
@@ -20,7 +23,7 @@ def max_coins(nums, start, end, memo):
     key = str(start) + " " + str(end)
     result = 0
 
-    print_memo(memo)
+    # print_memo(memo)
 
     if key in memo:
         return memo[key]
