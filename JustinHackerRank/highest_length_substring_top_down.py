@@ -1,41 +1,38 @@
-def high_substr_rec(str1, str2, start1, start2, end1, end2, memo, found):
+def high_substr_rec(str1, str2, memo):
 
-    key = str(start1) + "-" + str(end1) + " " + str(start1) + "-" + str(end2)
+    key = str1 + "-" + str2
     if key in memo:
         return memo[key]
     high = 0
-    if start1 == end1 or start2 == end2:
+    if len(str1) == 0 or len(str2) == 0:
         return 0
 
-    if found:
-        return 0
-    opt1 = high_substr_rec(str1, str2, start1+1, start2, end1, end2, memo, found)
-    if str1[start1] == str2[start2]:
-        opt1 += 1
-        found = True
-    opt2 = high_substr_rec(str1, str2, start1, start2+1, end1, end2, memo, found)
-    if str1[start1] == str2[start2]:
-        opt2 += 1
-        found = True
-    opt3 = high_substr_rec(str1, str2, start1, start2, end1-1, end2, memo, found)
-    if str1[end1] == str2[end2]:
-        opt3 += 1
-        found = True
-    opt4 = high_substr_rec(str1, str2, start1, start2, end1, end2-1, memo, found)
-    if str1[end1] == str2[end2]:
-        opt4 += 1
-        found = True
+    if str1 == str2:
+        return len(str1)
 
-    high = max(opt1, opt2, opt3, opt4)
+    for i in range(len(str1)):
+        temp_str1 = str1[:i]
+        if i+1 < len(str1):
+            temp_str1 += str1[i+1:]
+        high = max(high_substr_rec(temp_str1, str2, memo), high)
+
+    for i in range(len(str2)):
+        temp_str2 = str2[:i]
+        if i+1 < len(str1):
+            temp_str2 += str2[i+1:]
+        high = max(high_substr_rec(str1, temp_str2, memo), high)
+
     memo[key] = high
     return high
 
 
 def high_substr(str1, str2):
-    found = False
-    return high_substr_rec(str1, str2, 0, 0, len(str1)-1, len(str2)-1, {}, found)
+    return high_substr_rec(str1, str2, {})
 
 
-# print(high_substr("shinchan", "noharaaa"))
+print(high_substr("hna", "hna"))
 print(high_substr("abdcc", "abcde"))
-
+print(high_substr("shinchan", "noharaaa"))
+print(high_substr("abcdef", "fbdamn"))
+print(high_substr("harry", "sally"))
+print(high_substr("aa", "bb"))
