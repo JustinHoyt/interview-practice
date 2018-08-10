@@ -1,35 +1,33 @@
-def high_substr_rec(str1, str2, memo):
-
-    key = str1 + "-" + str2
-    if key in memo:
-        return memo[key]
-    high = 0
-    if len(str1) == 0 or len(str2) == 0:
+def high_substr_rec(str1, str2, i, j, memo):
+    size = len(str1)
+    if i >= size or j >= size:
         return 0
 
-    if str1 == str2:
-        return len(str1)
+    if memo[i][j] != -1:
+        return memo[i][j]
 
-    for i in range(len(str1)):
-        temp_str1 = str1[:i]
-        if i+1 < len(str1):
-            temp_str1 += str1[i+1:]
-        high = max(high_substr_rec(temp_str1, str2, memo), high)
+    if i == size-1 and j == size-1:
+        if str1[i] == str2[j]:
+            return 1
+        else:
+            return 0
 
-    for i in range(len(str2)):
-        temp_str2 = str2[:i]
-        if i+1 < len(str1):
-            temp_str2 += str2[i+1:]
-        high = max(high_substr_rec(str1, temp_str2, memo), high)
+    below = high_substr_rec(str1, str2, i+1, j, memo)
+    right = high_substr_rec(str1, str2, i, j+1, memo)
+    below_right = high_substr_rec(str1, str2, i+1, j+1, memo)
+    memo[i][j] = max(right, below)
+    if below_right == memo[i][j] and str1[i] == str2[j]:
+        memo[i][j] += 1
 
-    memo[key] = high
-    return high
+    return memo[i][j]
 
 
 def high_substr(str1, str2):
-    return high_substr_rec(str1, str2, {})
+    memo = [[-1] * len(str1) for x in range(len(str1))]
+    return high_substr_rec(str1, str2, 0, 0, memo)
 
 
+print(high_substr("a", "a"))
 print(high_substr("hna", "hna"))
 print(high_substr("abdcc", "abcde"))
 print(high_substr("shinchan", "noharaaa"))
