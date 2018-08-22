@@ -51,6 +51,42 @@ class Node:
                 return False
 
 
+def is_valid(current, parent):
+    if current is None:
+        return True
+    left = True
+    right = True
+    if current.left is not None:
+        if current.left.value > current.value:
+            left = False
+        if current.value > parent.value \
+                and current.left.value <= parent.value:
+            left = False
+
+    if current.right is not None:
+        if current.right.value <= current.value:
+            right = False
+        if current.value <= parent.value \
+                and current.left.value > parent.value:
+            right = False
+
+    if left == True:
+        left = is_valid(current.left, current)
+    if right == True:
+        right = is_valid(current.right, current)
+
+    return left and right
+
+
+def is_bst(root):
+    if root is None:
+        return True
+    else:
+        is_tree_valid = is_valid(root.left, root) \
+            and is_valid(root.right, root)
+        return is_tree_valid
+
+
 root = Node(4)
 root.insert(2)
 root.insert(7)
@@ -58,5 +94,14 @@ root.insert(1)
 root.insert(3)
 root.insert(6)
 
-print(root.lca(2, 7))
-print(root.find(6))
+invalid_bst = Node(3)
+invalid_bst.left = Node(2)
+invalid_bst.left.left = Node(1)
+invalid_bst.right = Node(4)
+invalid_bst.right.left = Node(5)
+invalid_bst.right.right = Node(6)
+
+# print(root.lca(2, 7))
+# print(root.find(6))
+print(is_bst(root))
+print(is_bst(invalid_bst))
