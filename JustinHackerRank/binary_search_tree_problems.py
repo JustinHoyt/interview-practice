@@ -51,40 +51,78 @@ class Node:
                 return False
 
 
-def is_valid(current, parent):
-    if current is None:
+    def is_bst_rec(self, prev):
+        if self is not None:
+            if self.left is not None \
+                    and self.left.is_bst_rec(prev) is False:
+                return False
+            if prev is not None \
+                    and prev.value >= self.value:
+                return False
+            if self.right is not None:
+                return self.right.is_bst_rec(self)
+            else:
+                return True
+        else:
+            return True
+
+
+    def is_bst(self):
+        prev = None
+        return self.is_bst_rec(prev)
+
+
+# def is_valid(current, parent):
+#     if current is None:
+#         return True
+#     left = True
+#     right = True
+#     if current.left is not None:
+#         if current.left.value > current.value:
+#             left = False
+#         if current.value > parent.value \
+#                 and current.left.value <= parent.value:
+#             left = False
+
+#     if current.right is not None:
+#         if current.right.value <= current.value:
+#             right = False
+#         if current.value <= parent.value \
+#                 and current.left.value > parent.value:
+#             right = False
+
+#     if left == True:
+#         left = is_valid(current.left, current)
+#     if right == True:
+#         right = is_valid(current.right, current)
+
+#     return left and right
+
+
+# def is_bst(root):
+#     if root is None:
+#         return True
+#     else:
+#         is_tree_valid = is_valid(root.left, root) \
+#             and is_valid(root.right, root)
+#         return is_tree_valid
+
+
+def is_bst_rec(current, prev):
+    if current is not None:
+        if is_bst_rec(current.left, prev) is False:
+            return False
+        if prev is not None \
+                and prev.value >= current.value:
+            return False
+        return is_bst_rec(current.right, current)
+    else:
         return True
-    left = True
-    right = True
-    if current.left is not None:
-        if current.left.value > current.value:
-            left = False
-        if current.value > parent.value \
-                and current.left.value <= parent.value:
-            left = False
-
-    if current.right is not None:
-        if current.right.value <= current.value:
-            right = False
-        if current.value <= parent.value \
-                and current.left.value > parent.value:
-            right = False
-
-    if left == True:
-        left = is_valid(current.left, current)
-    if right == True:
-        right = is_valid(current.right, current)
-
-    return left and right
 
 
 def is_bst(root):
-    if root is None:
-        return True
-    else:
-        is_tree_valid = is_valid(root.left, root) \
-            and is_valid(root.right, root)
-        return is_tree_valid
+    prev = None
+    return root.is_bst_rec(prev)
 
 
 root = Node(4)
@@ -103,5 +141,7 @@ invalid_bst.right.right = Node(6)
 
 # print(root.lca(2, 7))
 # print(root.find(6))
+# print(is_bst(root))
+# print(is_bst(invalid_bst))
 print(is_bst(root))
 print(is_bst(invalid_bst))
