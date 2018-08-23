@@ -39,27 +39,25 @@ class Node:
             return True
         if value < self.value:
             print("here")
-            if self.left is not None:
+            if self.left:
                 return self.left.find(value)
             else:
                 return False
         if value > self.value:
             print("here")
-            if self.right is not None:
+            if self.right:
                 return self.right.find(value)
             else:
                 return False
 
 
     def is_bst_rec(self, prev):
-        if self is not None:
-            if self.left is not None \
-                    and self.left.is_bst_rec(prev) is False:
+        if self:
+            if self.left and self.left.is_bst_rec(prev) is False:
                 return False
-            if prev is not None \
-                    and prev.value >= self.value:
+            if prev and prev.value >= self.value:
                 return False
-            if self.right is not None:
+            if self.right:
                 return self.right.is_bst_rec(self)
             else:
                 return True
@@ -109,11 +107,10 @@ class Node:
 
 
 def is_bst_rec(current, prev):
-    if current is not None:
+    if current:
         if is_bst_rec(current.left, prev) is False:
             return False
-        if prev is not None \
-                and prev.value >= current.value:
+        if prev and prev.value >= current.value:
             return False
         return is_bst_rec(current.right, current)
     else:
@@ -123,6 +120,25 @@ def is_bst_rec(current, prev):
 def is_bst(root):
     prev = None
     return root.is_bst_rec(prev)
+
+def lcp(root, best=0):
+    if root is None:
+        return 1,1
+    left, _ = lcp(root.left, best)
+    right, _ = lcp(root.right, best)
+    if root.left and root.left.value - 1 == root.value:
+        left += 1
+    else:
+        best = max(left, best)
+        left = 1
+    if root.right and root.right.value - 1 == root.value:
+        right += 1
+    else:
+        best = max(right, best)
+        right = 1
+
+    best = max(right, left, best)
+    return max(left, right), best
 
 
 root = Node(4)
@@ -139,9 +155,18 @@ invalid_bst.right = Node(5)
 invalid_bst.right.left = Node(2)
 invalid_bst.right.right = Node(6)
 
+lcp_tree = Node(1)
+lcp_tree.left = Node(2)
+lcp_tree.left.left = Node(3)
+lcp_tree.right = Node(4)
+lcp_tree.right.left = Node(5)
+lcp_tree.right.right = Node(6)
+lcp_tree.right.right.left = Node(7)
+
 # print(root.lca(2, 7))
 # print(root.find(6))
 # print(is_bst(root))
 # print(is_bst(invalid_bst))
-print(is_bst(root))
-print(is_bst(invalid_bst))
+# print(is_bst(root))
+# print(is_bst(invalid_bst))
+print(lcp(lcp_tree)[1])
