@@ -18,7 +18,7 @@ class Node:
                 self.right.insert(value)
 
 
-    def lca(self, v1, v2):
+    def lowest_common_ancestor(self, v1, v2):
         right = max(v1, v2)
         left = min(v1, v2)
         if self.value <= right and self.value >= left:
@@ -27,11 +27,11 @@ class Node:
         elif self.value < left:
             print("going right")
             if self.right is not None:
-                return self.right.lca(v1, v2)
+                return self.right.lowest_common_ancestor(v1, v2)
         elif self.value > right:
             print("going left")
             if self.left is not None:
-                return self.left.lca(v1, v2)
+                return self.left.lowest_common_ancestor(v1, v2)
 
 
     def find(self, value):
@@ -148,12 +148,12 @@ def longest_common_path(root):
     return result
 
 
-root = Node(4)
-root.insert(2)
-root.insert(7)
-root.insert(1)
-root.insert(3)
-root.insert(6)
+valid_bst = Node(4)
+valid_bst.insert(2)
+valid_bst.insert(7)
+valid_bst.insert(1)
+valid_bst.insert(3)
+valid_bst.insert(6)
 
 invalid_bst = Node(3)
 invalid_bst.left = Node(2)
@@ -162,18 +162,18 @@ invalid_bst.right = Node(5)
 invalid_bst.right.left = Node(2)
 invalid_bst.right.right = Node(6)
 
-lcp_tree = Node(1)
-lcp_tree.left = Node(2)
-lcp_tree.left.left = Node(3)
-lcp_tree.right = Node(4)
-lcp_tree.right.left = Node(5)
-lcp_tree.right.right = Node(6)
-lcp_tree.right.right.left = Node(7)
+longest_common_path_tree = Node(1)
+longest_common_path_tree.left = Node(2)
+longest_common_path_tree.left.left = Node(3)
+longest_common_path_tree.right = Node(4)
+longest_common_path_tree.right.left = Node(5)
+longest_common_path_tree.right.right = Node(6)
+longest_common_path_tree.right.right.left = Node(7)
 
-# print(root.lca(2, 7))
-# print(root.find(6))
-# print(is_bst(root))
+# print(valid_bst.lowest_common_ancestor(2, 7))
+# print(valid_bst.find(6))
+# print(is_bst(valid_bst))
 # print(is_bst(invalid_bst))
-# print(is_bst(root))
+# print(is_bst(valid_bst))
 # print(is_bst(invalid_bst))
-print(longest_common_path(lcp_tree))
+print(longest_common_path(longest_common_path_tree))
