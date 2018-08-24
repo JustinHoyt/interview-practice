@@ -121,11 +121,11 @@ def is_bst(root):
     prev = None
     return root.is_bst_rec(prev)
 
-def lcp(root, best=0):
+def longest_common_path_rec(root, best):
     if root is None:
         return 1,1
-    left, _ = lcp(root.left, best)
-    right, _ = lcp(root.right, best)
+    left, _ = longest_common_path_rec(root.left, best)
+    right, _ = longest_common_path_rec(root.right, best)
     if root.left and root.left.value - 1 == root.value:
         left += 1
     else:
@@ -137,8 +137,15 @@ def lcp(root, best=0):
         best = max(right, best)
         right = 1
 
-    best = max(right, left, best)
-    return max(left, right), best
+    so_far = max(left, right)
+    best = max(so_far, best)
+    return so_far, best
+
+
+def longest_common_path(root):
+    best = 0
+    result = longest_common_path_rec(root, best)[1]
+    return result
 
 
 root = Node(4)
@@ -169,4 +176,4 @@ lcp_tree.right.right.left = Node(7)
 # print(is_bst(invalid_bst))
 # print(is_bst(root))
 # print(is_bst(invalid_bst))
-print(lcp(lcp_tree)[1])
+print(longest_common_path(lcp_tree))
