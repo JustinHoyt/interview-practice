@@ -1,3 +1,5 @@
+from queue import Queue
+
 class Node:
     def __init__(self, value):
         self.left = None
@@ -148,6 +150,23 @@ def longest_common_path(root):
     return result
 
 
+def breadth_first_find(root, value):
+    next_to_visit = Queue()
+    next_to_visit.put(root)
+    while next_to_visit.empty() is False:
+        print("here")
+        current = next_to_visit.get(root)
+        if current.value == value:
+            return True
+
+        if current.left:
+            next_to_visit.put(current.left)
+        if current.right:
+            next_to_visit.put(current.right)
+
+    return False
+
+
 valid_bst = Node(4)
 valid_bst.insert(2)
 valid_bst.insert(7)
@@ -177,3 +196,4 @@ longest_common_path_tree.right.right.left = Node(7)
 # print(is_bst(valid_bst))
 # print(is_bst(invalid_bst))
 print(longest_common_path(longest_common_path_tree))
+print(breadth_first_find(valid_bst, 9))
