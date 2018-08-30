@@ -2,7 +2,7 @@ import math
 
 
 def paint(houses, memo, house, paint_color):
-    key = str(house) + ", " + str(paint_color)
+    key = (house, paint_color)
     if key in memo:
         return memo[key]
 

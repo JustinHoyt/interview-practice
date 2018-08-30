@@ -20,7 +20,7 @@ def product_of(nums, left, own, right):
 
 
 def max_coins(nums, start, end, memo):
-    key = str(start) + " " + str(end)
+    key = (start, end)
     result = 0
 
     # print_memo(memo)
