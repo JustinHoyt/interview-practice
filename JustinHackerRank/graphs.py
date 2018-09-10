@@ -1,7 +1,11 @@
+from collections import deque
+from collections import defaultdict
+
 class Graph:
     def __init__(self):
         self.vertices = set()
-        self.edges = {}
+        # need default dict or there wont be a list to append to
+        self.edges = defaultdict(list)
         self.weights = {}
 
     def add_vertex(self, vertex):
@@ -22,9 +26,22 @@ def traverse_rec(graph, current, visited):
             traverse_rec(graph, neighbor, visited)
 
 
-def traverse(graph, current):
+def depth_first_search(graph, current):
     visited = set()
     return traverse_rec(graph, current, visited)
+
+
+def breadth_first_search(graph, start):
+    visited = {start}
+    queue = deque()
+    queue.append(start)
+    while queue:
+        curr = queue.popleft()
+        print(curr)
+        for node in graph.edges[curr]:
+            if node not in visited:
+                visited.add(node)
+                queue.append(node)
 
 
 verticies = {'a', 'b', 'c', 'd'}
@@ -44,4 +61,6 @@ graph.add_edge('c', 'b', 1)
 graph.add_edge('c', 'd', 5)
 graph.add_edge('b', 'd', 2)
 
-traverse(graph, 'a')
+depth_first_search(graph, 'c')
+print()
+breadth_first_search(graph, 'a')
