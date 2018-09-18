@@ -1,6 +1,7 @@
 def find(nums, target):
+    if len(nums) == 0 or len(nums[0]) == 0:
+        return False
     row_idx = find_row(nums, target, 0, len(nums)-1)
-    print(row_idx)
     return find_in_row(nums, target, row_idx, 0, len(nums)-1)
 
 
@@ -22,7 +23,6 @@ def find_in_row(nums, target, row, col_start, col_end):
         return False
     midpoint = col_start + (col_end - col_start) // 2
     if target == nums[row][midpoint]:
-        print(midpoint)
         return True
     elif target < nums[row][midpoint]:
         return find_in_row(nums, target, row, col_start, midpoint-1)
@@ -38,4 +38,4 @@ nums = [
     [82, 93, 95, 97, 100],
 ]
 
-print(find(nums, 1))
+print(find(nums, 78))
