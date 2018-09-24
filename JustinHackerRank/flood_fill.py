@@ -3,6 +3,8 @@ def flood_fill_rec(grid, row, col, color_to_paint):
             col < len(grid[0]) and col >= 0 and
             grid[row][col] != color_to_paint):
         grid[row][col] = color_to_paint
+        # for row in grid:
+        #     print(row)
         flood_fill_rec(grid, row+1, col, color_to_paint)
         flood_fill_rec(grid, row-1, col, color_to_paint)
         flood_fill_rec(grid, row, col+1, color_to_paint)
@@ -26,5 +28,4 @@ grid1 = [[0, 1, 0, 1],
 print(flood_fill(grid1, 2, 2))
 grid2 = []
 print(flood_fill(grid2, 0, 0))
-for row in grid1:
-    print(row)
+[print(row) for row in grid1]
