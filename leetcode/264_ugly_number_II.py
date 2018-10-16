@@ -3,6 +3,8 @@ def nth_ugly_num(n):
 
     num = 5
     count = 5
+    if n <= 5:
+        return n
     while count != n+1:
         if num % 2 == 0:
             memo.append(memo[num//2])
@@ -22,6 +24,9 @@ def nth_ugly_num(n):
     return len(memo) - 1
 
 
+print(nth_ugly_num(3))
+print(nth_ugly_num(5))
+print(nth_ugly_num(7))
 print(nth_ugly_num(11))
 print(nth_ugly_num(12))
 print(nth_ugly_num(13))
@@ -29,3 +34,4 @@ print(nth_ugly_num(14))
 print(nth_ugly_num(15))
 print(nth_ugly_num(16))
 print(nth_ugly_num(17))
+print(nth_ugly_num(800))
