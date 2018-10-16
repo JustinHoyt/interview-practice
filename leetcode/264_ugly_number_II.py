@@ -1,27 +1,22 @@
 def nth_ugly_num(n):
-    memo = [True, True, True, True, True]
+    ugly_memo = {1, 2, 3, 4, 5}
 
     num = 5
-    count = 5
+    num_ugly = 5
     if n <= 5:
         return n
-    while count != n+1:
-        if num % 2 == 0:
-            memo.append(memo[num//2])
-            if memo[-1] is True:
-                count += 1
-        elif num % 3 == 0:
-            memo.append(memo[num//3])
-            if memo[-1] is True:
-                count += 1
-        elif num % 5 == 0:
-            memo.append(memo[num//5])
-            if memo[-1] is True:
-                count += 1
-        else:
-            memo.append(False)
+    while num_ugly <= n:
+        if num % 2 == 0 and num // 2 in ugly_memo:
+            ugly_memo.add(num)
+            num_ugly += 1
+        elif num % 3 == 0 and num // 3 in ugly_memo:
+            ugly_memo.add(num)
+            num_ugly += 1
+        elif num % 5 == 0 and num // 5 in ugly_memo:
+            ugly_memo.add(num)
+            num_ugly += 1
         num += 1
-    return len(memo) - 1
+    return num - 1
 
 
 print(nth_ugly_num(3))
@@ -34,4 +29,7 @@ print(nth_ugly_num(14))
 print(nth_ugly_num(15))
 print(nth_ugly_num(16))
 print(nth_ugly_num(17))
+print(nth_ugly_num(100))
+print(nth_ugly_num(200))
+print(nth_ugly_num(400))
 print(nth_ugly_num(800))
