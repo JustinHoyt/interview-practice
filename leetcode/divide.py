@@ -1,3 +1,4 @@
+from timeit import default_timer as timer
 '''
 Divide without division or modulo
 '''
@@ -47,6 +48,22 @@ def divide_binary_search(num, den):
     return quotient, remainder
 
 
-print(divide_linear(931, 3))
-print(divide_climb(931, 3))
-print(divide_binary_search(931, 3))
+start = timer()
+print("linear -", divide_linear(12345678, 3))
+end = timer()
+print(end - start)
+
+start = timer()
+print("climb -", divide_climb(12345678, 3))
+end = timer()
+print(end - start)
+
+start = timer()
+print("binary search -", divide_binary_search(12345678, 3))
+end = timer()
+print(end - start)
+
+
+# print(divide_linear(931, 3))
+# print(divide_climb(931, 3))
+# print(divide_binary_search(931, 3))

@@ -23,6 +23,24 @@ def checksum(words):
     return two_occurances * three_occurances
 
 
+def find_prototype(words):
+    word_maps = []
+    for word in words:
+        word_map = {}
+        found_2 = False
+        found_3 = False
+        for letter in word:
+            if letter in word_map:
+                word_map[letter] += 1
+            else:
+                word_map[letter] = 1
+        word_maps.append(word_map)
+
+    for i in range(len(word_maps)):
+        for j in range(len(word_maps)):
+            pass
+
+
 input = [
     "pbopcmjeizuhxlqnwasfgtycdm",
     "pjokrmjeizuhxlqnfasfguycdv",
