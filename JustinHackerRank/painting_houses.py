@@ -24,7 +24,6 @@ def paint_houses(houses):
     memo = {}
     house = 0
     result = math.inf
-    # result = paint(houses, memo, house, -1)
     for paint_color in range(3):
         result = min(paint(houses, memo, house, paint_color), result)
     return result
