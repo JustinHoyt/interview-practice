@@ -1,5 +1,5 @@
 '''
-Given an array of distinct elements. The task is to find triplets in array whose sum is zero
+Determine if any 3 integers in an array sum to 0.
 '''
 def sum_to_zero(nums):
     num_set = set()
@@ -9,8 +9,11 @@ def sum_to_zero(nums):
         for j in range(len(nums)):
             sum = nums[i] + nums[j]
             if -sum in num_set:
-                print(-sum, nums[i], nums[j])
+                return True
+    return False
 
 
-nums = [1,-2,1,3,3,1,2,-9, 0]
-print(sum_to_zero(nums))
+nums1 = [1,-2,1,3,3,1,2,-9, 0]
+nums2 = [1,-1,3,9]
+print(sum_to_zero(nums1))
+print(sum_to_zero(nums2))
