@@ -1,6 +1,15 @@
 '''
 Determine if any 3 integers in an array sum to 0.
 '''
+
+def brute_force_sum_to_zero(nums):
+    for i in range(0, len(nums)):
+        for j in range (i, len(nums)):
+            for k in range(j, len(nums)):
+                if ((nums[i] + nums[j] + nums[k]) == 0):
+                    return True
+    return False
+
 def sum_to_zero(nums):
     num_set = set()
     for num in nums:
