@@ -19,7 +19,6 @@ int main()
 
     // iterate over map
     for (auto const& pair: myMap) {
-        std::cout << "{" << pair.first << ": " << pair.second << "}\n";
+        cout << "{" << pair.first << ": " << pair.second << "}\n";
     }
-
 }
