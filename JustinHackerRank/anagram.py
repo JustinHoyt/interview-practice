@@ -2,14 +2,15 @@ def min_changes_to_anagram(str1, str2):
     min_changes = 0
     letter_frequency_map = {}
     for letter in str1:
-        if letter in char_map:
-            letter_frequency_map[char] += 1
+        if letter in letter_frequency_map:
+            letter_frequency_map[letter] += 1
         else:
-            letter_frequency_map[char] = 1
+            letter_frequency_map[letter] = 1
 
     for letter in str2:
-        if letter in char_map and char_map[char] > 0:
-            letter_frequency_map[char] -= 1
+        if (letter in letter_frequency_map
+                and letter_frequency_map[letter] > 0):
+            letter_frequency_map[letter] -= 1
 
     for count in letter_frequency_map.values():
         min_changes += count
