@@ -1,5 +1,25 @@
 from timeit import default_timer as timer
 
+def nth_ugly_num(n):
+    ugly = [1]
+    idx_2 = 0
+    idx_3 = 0
+    idx_5 = 0
+    while n > 1:
+        ugly_2 = 2 * ugly[idx_2]
+        ugly_3 = 3 * ugly[idx_3]
+        ugly_5 = 5 * ugly[idx_5]
+        next_ugly = min(ugly_2, ugly_3, ugly_5)
+        if next_ugly == ugly_2:
+            idx_2 += 1
+        if next_ugly == ugly_3:
+            idx_3 += 1
+        if next_ugly == ugly_5:
+            idx_5 += 1
+        ugly.append(next_ugly)
+        n -= 1
+    return ugly[-1]
+
 
 def nth_ugly_num_DP(n):
     calculations = 0
@@ -28,50 +48,6 @@ def nth_ugly_num_DP(n):
     return num - 1
 
 
-def nth_ugly_num(n):
-    calculation = 0
-    memo = [1, 2, 3, 4, 5]
-    start_ugly_prime_two = 0
-    start_ugly_prime_three = 0
-    start_ugly_prime_five = 0
-    if n < len(memo):
-        return n
-    for _ in range(n-5):
-        next_ugly = float('inf')
-        for memo_idx in range(start_ugly_prime_two, len(memo)):
-            ugly_prime = 2
-            possible_ugly = memo[memo_idx] * ugly_prime
-            calculation += 1
-            if(possible_ugly > memo[-1] and
-               possible_ugly < next_ugly):
-                next_ugly = possible_ugly
-        if memo[start_ugly_prime_two] * 2 < next_ugly:
-            start_ugly_prime_two += 1
-
-        for memo_idx in range(start_ugly_prime_three, len(memo)):
-            ugly_prime = 3
-            possible_ugly = memo[memo_idx] * ugly_prime
-            calculation += 1
-            if(possible_ugly > memo[-1] and
-               possible_ugly < next_ugly):
-                next_ugly = possible_ugly
-        if memo[start_ugly_prime_three] * 3 < next_ugly:
-            start_ugly_prime_three += 1
-
-        for memo_idx in range(start_ugly_prime_five, len(memo)):
-            ugly_prime = 5
-            possible_ugly = memo[memo_idx] * ugly_prime
-            calculation += 1
-            if(possible_ugly > memo[-1] and
-               possible_ugly < next_ugly):
-                next_ugly = possible_ugly
-        if memo[start_ugly_prime_five] * 5 < next_ugly:
-            start_ugly_prime_five += 1
-        memo.append(next_ugly)
-    print("calculations:", calculation)
-    return memo[-1]
-
-
 # print("1th number is:", nth_ugly_num(1))
 # print("2th number is:", nth_ugly_num(2))
 # print("3th number is:", nth_ugly_num(3))
@@ -95,7 +71,7 @@ def nth_ugly_num(n):
 # print("800th number is:", nth_ugly_num(800))
 
 start = timer()
-print("1690 -", nth_ugly_num(1690))
+print("mine 1690 -", nth_ugly_num(1690))
 end = timer()
 print(end - start)
 

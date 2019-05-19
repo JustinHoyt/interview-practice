@@ -22,30 +22,38 @@ class Solution:
         return max(longest_length, curr_length)
 
     def length_of_longest_substring_map(self, s: str) -> int:
-        letter_map = {}
+        most_recent_letter_idx_map = {}
         longest_length = 0
         curr_length = 0
         left = 0
         for right, letter in enumerate(s):
-            if letter in letter_map:
+            if letter in most_recent_letter_idx_map:
                 longest_length = max(longest_length, curr_length)
-                left = max(left, letter_map[letter] + 1)
-                letter_map[letter] = right
+                if most_recent_letter_idx_map[letter] >= left:
+                    left = most_recent_letter_idx_map[letter] + 1
+                most_recent_letter_idx_map[letter] = right
                 curr_length = right - left + 1
             else:
                 curr_length += 1
-                letter_map[letter] = right
+                most_recent_letter_idx_map[letter] = right
+            print("most_recent_letter_map =", most_recent_letter_idx_map)
+            print("curr_length =", curr_length)
+            print("longest_length =", longest_length)
+            print("left =", left)
+            print("right =", right)
+            print()
+            input()
         longest_length = max(curr_length, longest_length)
         return longest_length
 
 sol = Solution()
-input = "arbcaqcbb"
-print(sol.length_of_longest_substring_map(input))
-input = "bbbbb"
-print(sol.length_of_longest_substring_map(input))
-input = "pwwkew"
-print(sol.length_of_longest_substring_map(input))
-input = "abba"
-print(sol.length_of_longest_substring_map(input))
-input = "a"
-print(sol.length_of_longest_substring_map(input))
+problem = "QRACAR"
+print(sol.length_of_longest_substring_map(problem))
+# problem = "pwwkew"
+# print(sol.length_of_longest_substring_map(problem))
+# problem = "abba"
+# print(sol.length_of_longest_substring_map(problem))
+# problem = "a"
+# print(sol.length_of_longest_substring_map(problem))
+# problem = "bbbbb"
+# print(sol.length_of_longest_substring_map(problem))
