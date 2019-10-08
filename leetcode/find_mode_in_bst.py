@@ -4,30 +4,69 @@ class Node:
         self.left = None
         self.right = None
 
+'''
+           4
+          / \
+         2   5
+        / \   \
+       2   3   6
+      /   /
+     2   3
+    /
+   1
+'''
 
-best = 0
+
+best_mode = 0
+best_value = 0
 
 def find_mode(node):
-    global best
+    global best_mode
+    global best_value
     if not node:
-        return 0
-    so_far = find_mode(node.left)
+        return 0, None
+
+    left_mode, left_value = find_mode(node.left)
+
+    if left_mode > best_mode:
+        best_mode = left_mode
+        best_value = left_value
+
+    find_mode(node.right)
 
     if node.left and node.left.value == node.value:
-        return find_mode(node.right) + so_far + 1
+        return left_mode + 1, node.value
     else:
-        best = max(best, so_far)
-        return find_mode(node.right) + 1
+        return 1, node.value
 
 
-root = Node(30)
-root.left = Node(10)
-root.right = Node(60)
-root.left.left = Node(5)
-root.right.left = Node(40)
-root.right.left.left = Node(40)
-root.right.left.left.left = Node(40)
-root.right.left.left.left.left = Node(40)
+root = Node(4)
+root.right = Node(5)
+root.right.right = Node(6)
+root.left = Node(2)
+root.left.left = Node(2)
+root.left.left.left = Node(2)
+root.left.left.left.left = Node(1)
+root.left.right = Node(3)
+root.left.right.left = Node(3)
+# root.left.right.left.left = Node(3)
+
+# LSR: 5, 10, 30, 40, 40, 40, 40, 60
+# [5, 10, 30, 40, 40, 40, 40, 60]
+
+
+#                      30
+#                 10                            60
+#             5                            40
+#                                     40
+#                                40
+#                           40
+
+
+
 
 find_mode(root)
-print(best)
+print("value:", best_value)
+print("mode", best_mode)
+
+# in_order(root)
