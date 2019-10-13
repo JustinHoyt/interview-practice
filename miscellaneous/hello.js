@@ -17,7 +17,13 @@ inquirer
     .prompt(questions)
     .then(answers => {
         const { factorial, numberOfLoops } = answers;
+
+        result = 1;
+        for(i = 1; i <= factorial; i++) {
+            result *= i;
+        }
+
         for(i = 0; i < numberOfLoops; i++) {
-            console.log(factorial * factorial);
+            console.log(result);
         }
     });
