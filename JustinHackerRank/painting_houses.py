@@ -1,19 +1,19 @@
 import math
 
 
-def paint(houses, memo, house, paint_color):
-    key = (house, paint_color)
+def paint(houses, memo, house, curr_house_color):
+    key = (house, curr_house_color)
     if key in memo:
         return memo[key]
 
     if house == len(houses)-1:
-        return houses[house][paint_color]
+        return houses[house][curr_house_color]
 
     lowest_cost = math.inf
-    for i in range(3):
-        if paint_color != i:
-            possible_cost = paint(houses, memo, house+1, i)
-            possible_cost += houses[house][paint_color]
+    for next_house_color in range(3):
+        if curr_house_color != next_house_color:
+            possible_cost = paint(houses, memo, house+1, next_house_color)
+                            + houses[house][curr_house_color]
             lowest_cost = min(possible_cost, lowest_cost)
 
     memo[key] = lowest_cost
@@ -24,8 +24,8 @@ def paint_houses(houses):
     memo = {}
     house = 0
     result = math.inf
-    for paint_color in range(3):
-        result = min(paint(houses, memo, house, paint_color), result)
+    for curr_house_color in range(3):
+        result = min(paint(houses, memo, house, curr_house_color), result)
     return result
 
 

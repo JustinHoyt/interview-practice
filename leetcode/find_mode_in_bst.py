@@ -23,21 +23,25 @@ best_value = 0
 def find_mode(node):
     global best_mode
     global best_value
+    mode = 0
+    value = node.value if node else None
     if not node:
-        return 0, None
+        return mode, value
 
-    left_mode, left_value = find_mode(node.left)
+    mode, value = find_mode(node.left)
 
-    if left_mode > best_mode:
-        best_mode = left_mode
-        best_value = left_value
+    if mode > best_mode:
+        best_mode = mode
+        best_value = value
 
     find_mode(node.right)
 
     if node.left and node.left.value == node.value:
-        return left_mode + 1, node.value
+        mode += 1
     else:
-        return 1, node.value
+        mode = 1
+
+    return mode, node.value
 
 
 root = Node(4)

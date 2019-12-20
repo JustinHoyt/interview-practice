@@ -21,7 +21,7 @@ def get_repair_cost(graph, road_cost, library_cost):
 
 graph = {
     7: {1},
-    1: {3, 2},
+    1: {3, 2, 7},
     2: {1, 3},
     3: {1, 2},
     8: {6},
@@ -29,4 +29,7 @@ graph = {
     5: {6},
 }
 
-print(get_repair_cost(graph, 2, 3))
+road_cost = 2
+library_cost = 3
+
+print(get_repair_cost(graph, road_cost, library_cost))

@@ -13,9 +13,8 @@ questions = [
     }
 ]
 
-inquirer
-    .prompt(questions)
-    .then(answers => {
+inquirer.prompt(questions).then(answers => {
+        console.log(answers);
         const { factorial, numberOfLoops } = answers;
 
         result = 1;
@@ -27,3 +26,4 @@ inquirer
             console.log(result);
         }
     });
+

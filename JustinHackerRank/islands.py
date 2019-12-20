@@ -21,8 +21,8 @@ def count_islands_with_is_visited_grid(grid):
     '''
     is_visited_grid = [[0] * len(grid[0]) for x in range(len(grid))]
     islands_count = 0
-    for row in range(len(grid)):
-        for col in range(len(grid[0])):
+    for row, _ in enumerate(grid):
+        for col, _ in enumerate(grid[row]):
             if grid[row][col] == 1 and is_visited_grid[row][col] == 0:
                 islands_count += 1
                 explore_land_with_is_visited_grid(grid, is_visited_grid, row, col)
@@ -30,11 +30,9 @@ def count_islands_with_is_visited_grid(grid):
 
 
 def explore_land_mutate_input(grid, row, col):
-    if row < len(grid) and \
-            row >= 0 and \
-            col < len(grid[0]) and \
-            col >= 0 and \
-            grid[row][col] == 1:
+    if (0 <= row < len(grid) and
+            0 <= col < len(grid[0]) and
+            grid[row][col] == 1):
         grid[row][col] = 0
         explore_land_mutate_input(grid, row+1, col)
         explore_land_mutate_input(grid, row-1, col)

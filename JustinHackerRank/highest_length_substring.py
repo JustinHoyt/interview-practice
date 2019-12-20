@@ -52,7 +52,7 @@ def highest_substr(str1, str2):
                 else:
                     matrix[i][j] += 1
                     cascade(matrix, i, j)
-            printMatrix(matrix, str1, str2, i, j)
+            # printMatrix(matrix, str1, str2, i, j)
 
     return matrix[size-1][size-1]
 
