@@ -24,26 +24,26 @@ class BinaryTreeNode:
 #                            17
 #                                 18
 
-# peworder till i hit a leaf node
-# pre: SRL -> [10, 16, 20, 17, 18]
 
-def second_largest_element(root, high = float('-inf'), second_high = float('-inf')):
-    # go until leaf node, then return second highest
-    stack = []
-    stack.append(root)
-    while stack:
-        node = stack.pop()
-        if node.left:
-            stack.append(node.left)
-        if node.right:
-            stack.append(node.right)
-        if node.value > high:
-            second_high = high
-            high = node.value
-        elif node.value > second_high:
-            second_high = node.value
-        if node.right is None and node.left is None:
-            return second_high
+def find_second_largest( head ):
+    largest_parent, largest = find_largest(head)
+    second_largest = None
+    if largest.left:
+        _, second_largest = find_largest(largest.left)
+    else:
+        second_largest = largest_parent
+
+    return second_largest.value
+
+
+def find_largest(head):
+    current = head
+    prev = None
+    while current.right:
+        prev = current
+        current = current.right
+
+    return prev, current
 
 def print_tree(root):
     if root is None:
@@ -52,13 +52,14 @@ def print_tree(root):
     print(root.value, end=" ")
     print_tree(root.right)
 
-tree = BinaryTreeNode(10)
-tree.insert_left(5)
-tree.insert_right(16)
-tree.right.insert_right(20)
-tree.right.right.insert_left(17)
-tree.right.right.left.insert_right(18)
+tree = BinaryTreeNode(200)
+tree.left = BinaryTreeNode(100)
+tree.left.right = BinaryTreeNode(150)
+tree.left.right.right = BinaryTreeNode(170)
+tree.left.left = BinaryTreeNode(90)
+tree.left.left.left = BinaryTreeNode(80)
+tree.left.left.left.left = BinaryTreeNode(70)
 
 print_tree(tree)
 print()
-print(second_largest_element(tree))
+print(find_second_largest(tree))
