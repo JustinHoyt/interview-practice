@@ -36,13 +36,6 @@ class Solution:
             else:
                 curr_length += 1
                 most_recent_letter_idx_map[letter] = right
-            print("most_recent_letter_map =", most_recent_letter_idx_map)
-            print("curr_length =", curr_length)
-            print("longest_length =", longest_length)
-            print("left =", left)
-            print("right =", right)
-            print()
-            input()
         longest_length = max(curr_length, longest_length)
         return longest_length
 

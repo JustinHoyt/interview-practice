@@ -1,18 +1,20 @@
-const zip = (arr1, arr2) => arr1.map((k, i) => [k, arr2[i]]);
+const isMatchingWord = (isMatchedSoFar, [wordChar, queryChar]) => {
+    return isMatchedSoFar && (queryChar === wordChar || queryChar === "*");
+};
+
+const isMatchInWords = (isMatchInArray, [word, query]) => {
+    const zippedWordAndQuery = Array.from(word).map((wordChar, i) => [wordChar, query[i]]);
+    const matched = zippedWordAndQuery.reduce(isMatchingWord, true);
+
+    return matched || isMatchInArray;
+};
 
 const dictionary_wildcard = (words, query) => {
     const filteredWords = words.filter( word => word.length == query.length);
+    const zippedWordsAndQuery = filteredWords.map((word) => [word, query]);
 
-    return filteredWords.reduce( (isMatchInArray, word) => {
-        zipped_query_word = zip(Array.from(query), Array.from(word));
-
-        const matched = zipped_query_word.reduce( (isMatchedSoFar, [queryChar, wordChar]) => {
-            return isMatchedSoFar && (queryChar === wordChar || queryChar === "*");
-        }, true);
-
-        return matched || isMatchInArray;
-    }, false);
-}
+    return zippedWordsAndQuery.reduce( isMatchInWords, false);
+};
 
 
 const words = ["foo", "bar", "baz"];
