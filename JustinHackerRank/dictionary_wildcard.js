@@ -11,13 +11,14 @@ will return true since the "*" matches the first "o" in foo
 isMember(["foo", "bar", "baz"], "**")
 will return false since there are no two-letter words in the array
 */
-const zip = require('lodash/zip');
 
-const charMatch = ([queryChar, wordChar]) => wordChar === queryChar || queryChar === "*";
+const zip = (arr1, arr2) => arr1.map((ele, idx) => [ele, arr2[idx]]);
+
+const charMatch = ([wordChar, queryChar]) => wordChar === queryChar || queryChar === "*";
 
 const dictionary_wildcard = (words, query) => {
     return words.filter( word => word.length == query.length)
-        .some(word => zip(word, query).every(charMatch));
+        .some(word => zip([...word], [...query]).every(charMatch));
 };
 
 const words = ["foo", "bar", "baz"];

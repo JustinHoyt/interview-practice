@@ -5,7 +5,7 @@ const intersectOthers = (_, i, sets) => {
     return otherSets.reduce((acc, set) => intersection(acc, set));
 };
 
-const setToExclude = (sets) => {
+const setToExcludeBruteForce = (sets) => {
     const setIntersections = sets.map(intersectOthers);
 
     const {idx} = setIntersections.reduce((acc, set, i) => {
@@ -15,6 +15,30 @@ const setToExclude = (sets) => {
     return idx;
 };
 
-sets = [new Set([1,2,3]), new Set([2,3,4]), new Set([4,5,6])];
-console.log(setToExclude(sets));
 
+const setToExclude = (sets) => {
+    const lastIdx = sets.length - 1
+
+    const leftMemo = {};
+    const rightMemo = {};
+    sets.reduce((acc, set, i) => leftMemo[i] = (intersection(acc, set)), sets[0]);
+    [...sets].reverse().reduce((acc, set, i) => {
+            return rightMemo[lastIdx - i] = (intersection(acc, set))
+        }, sets[0]);
+
+    const intersectSizes = sets.map((_, i) => {
+        if(i === 0) return rightMemo[0].size;
+        if(i === lastIdx) return leftMemo[lastIdx].size;
+        return intersection(leftMemo[i-1], rightMemo[i+1]).size;
+    });
+
+    const {idx} = intersectSizes.reduce((acc, size, i) => {
+        return size > acc.size ? {idx: i, size} : acc;
+    }, {idx: 0, size: 0});
+
+    return idx;
+};
+
+
+sets = [new Set([1,2,3,4,5,6]), new Set([2,3,4,6]), new Set([4,5,6]), new Set([2,4,5,6])];
+console.log(setToExclude(sets));
