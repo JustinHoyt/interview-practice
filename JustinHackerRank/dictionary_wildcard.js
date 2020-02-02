@@ -12,14 +12,16 @@ isMember(["foo", "bar", "baz"], "**")
 will return false since there are no two-letter words in the array
 */
 
-const zip = (arr1, arr2) => arr1.map((ele, idx) => [ele, arr2[idx]]);
+const dictionary_wildcard = (words, query) => {
+    return words.filter(word => word.length == query.length)
+                .some(word => wordsMatch(word, query));
+};
+
+const wordsMatch = (word, query) => zip([...word], [...query]).every(charMatch);
 
 const charMatch = ([wordChar, queryChar]) => wordChar === queryChar || queryChar === "*";
 
-const dictionary_wildcard = (words, query) => {
-    return words.filter( word => word.length == query.length)
-        .some(word => zip([...word], [...query]).every(charMatch));
-};
+const zip = (arr1, arr2) => arr1.map((ele, idx) => [ele, arr2[idx]]);
 
 const words = ["foo", "bar", "baz"];
 console.log(dictionary_wildcard(words, "b*r"));
