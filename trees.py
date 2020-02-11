@@ -57,15 +57,37 @@ def pre_order_print(root):
     pre_order_print(root.right)
 
 
+# def divide_elements_highest_to_lowest(root):
+#     if root.right:
+#         result = divide_elements_highest_to_lowest(root.right) / root.val
+#     else:
+#         result = root.val
+#     if root.left:
+#         return result / divide_elements_highest_to_lowest(root.left)
+#     else:
+#         return result
+
 def divide_elements_highest_to_lowest(root):
-    if root.right:
-        result = divide_elements_highest_to_lowest(root.right) / root.val
-    else:
-        result = root.val
-    if root.left:
-        return result / divide_elements_highest_to_lowest(root.left)
-    else:
-        return result
+
+    result = None
+    def divide_rec(root):
+        nonlocal result
+        if root is None:
+            return
+
+        divide_rec(root.right)
+
+        # if at the highest value, set it as the result
+        if root.right is None and result is None:
+            result = root.val
+        else:
+            result /= root.val
+
+        divide_rec(root.left)
+
+    divide_rec(root)
+    return result
+
 
 
 root = Node(5)
@@ -77,10 +99,14 @@ assert not root.contains(14)
 assert root.contains(15)
 
 
-divide_tree = Node(10)
-divide_tree.insert(40)
-divide_tree.insert(2)
-in_order_print(divide_tree)
+# divide_tree = Node(10)
+# divide_tree.insert(40)
+# divide_tree.insert(2)
+divide_tree = Node(4)
+divide_tree.left = Node(2)
+divide_tree.right = Node(128)
+divide_tree.right.left = Node(8)
+# in_order_print(divide_tree)
 print(divide_elements_highest_to_lowest(divide_tree))
 
 

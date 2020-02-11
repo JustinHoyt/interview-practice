@@ -39,6 +39,7 @@ def max_string(string, pair_weight, char_weight, transform_weight):
 
         # transform the index at a cost and don't move place. only do this once per index
         if not is_transformed:
+            if string[idx] == 1
             new_string = string
             new_string[idx] = 1 if new_string[idx] == 0 else 0
             transform_val = max_string_rec(new_string, idx, True) - transform_weight
