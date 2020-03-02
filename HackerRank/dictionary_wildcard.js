@@ -17,9 +17,9 @@ const dictionary_wildcard = (words, query) => {
                 .some(word => wordsMatch(word, query));
 };
 
-const wordsMatch = (word, query) => zip([...word], [...query]).every(charMatch);
+const wordsMatch = (word, query) => zip([...word], [...query]).every(charsMatch);
 
-const charMatch = ([wordChar, queryChar]) => wordChar === queryChar || queryChar === "*";
+const charsMatch = ([wordChar, queryChar]) => wordChar === queryChar || queryChar === "*";
 
 const zip = (arr1, arr2) => arr1.map((ele, idx) => [ele, arr2[idx]]);
 

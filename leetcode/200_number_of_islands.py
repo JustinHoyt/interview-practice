@@ -16,7 +16,7 @@ class Solution:
             self.explore_island(matrix, visited, i, j + 1)
             self.explore_island(matrix, visited, i, j - 1)
 
-    def numIslands2(self, matrix) -> int:
+    def numIslands(self, matrix) -> int:
         if len(matrix) == 0:
             return 0
         visited = {}
@@ -37,4 +37,4 @@ matrix = [
     [0, 0, 0],
     [0, 1, 0]
 ]
-print(sol.numIslands2(matrix))
+print(sol.numIslands(matrix))
