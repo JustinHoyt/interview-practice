@@ -15,21 +15,19 @@ class Solution:
             if node is None:
                 return 0
 
-            curr_sum = node.val
             left = dfs(node.left)
             right = dfs(node.right)
             best_child = max(left, right)
 
-            sum_as_subpath = curr_sum
-            sum_as_subpath += best_child if best_child > 0 else 0
+            sum_with_best_child = node.val + best_child
 
-            sum_as_pivot = curr_sum
-            sum_as_pivot += left if left > 0 else 0
-            sum_as_pivot += right if right > 0 else 0
+            sum_with_both_children = node.val + left + right
 
-            highest_sum = max(sum_as_pivot, highest_sum)
+            highest_sum = max(sum_with_both_children, highest_sum)
 
-            return sum_as_subpath
+            if sum_with_best_child < 0:
+                return 0
+            return sum_with_best_child
 
         dfs(root)
         return highest_sum
