@@ -2,3 +2,5 @@ tag*
 *.pyc
 .idea
 node_modules
+.vim
+
