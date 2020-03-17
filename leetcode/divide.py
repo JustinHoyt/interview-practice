@@ -2,6 +2,24 @@ from timeit import default_timer as timer
 '''
 Divide without division or modulo
 '''
+
+# Cleanest solution
+def divide(numerator, denominator):
+    low = 0
+    high = numerator
+
+    while low <= high:
+        quotient = (low + high) // 2
+        remainder = numerator - quotient * denominator
+
+        if 0 <= remainder < denominator:
+            return quotient, remainder
+        if remainder < 0:
+            high = quotient - 1
+        else:
+            low = quotient + 1
+
+
 # Linear solution
 def divide_linear(num, den):
     remaining = num

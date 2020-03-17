@@ -1,20 +1,20 @@
 from math import ceil
 
 class Solution:
+    def time_to_eat(self, piles, bananas_per_hour):
+        count = 0
+        for pile in piles:
+            count += ceil(pile / bananas_per_hour)
+        return count
+
     def minEatingSpeed(self, piles, H):
         low = 1
         high = max(piles)
 
-        def time_to_eat(bananas_per_hour):
-            count = 0
-            for pile in piles:
-                count += ceil(pile / bananas_per_hour)
-            return count
-
         while low <= high:
             bananas_per_hour = (low + high) // 2
 
-            time = time_to_eat(bananas_per_hour)
+            time = self.time_to_eat(piles, bananas_per_hour)
 
             if time <= H:
                 high = bananas_per_hour - 1

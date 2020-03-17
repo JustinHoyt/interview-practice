@@ -3,4 +3,5 @@ tag*
 .idea
 node_modules
 .vim
+.vscode
 
