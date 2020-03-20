@@ -6,23 +6,23 @@ def max_intersection(sets):
     size = len(sets)
     if size <= 1:
         return -1
-    memo = {(0,0): sets[0]}
+    left_memo = {0: sets[0]}
     for i in range(1, size):
-        memo[(0,i)] = memo[(0,i-1)] & sets[i]
-    memo[(size-1,size-1)] = sets[size-1]
+        left_memo[i] = left_memo[i-1] & sets[i]
+    right_memo = {size-1: sets[size-1]}
     for i in range(size-1, -1, -1):
-        memo[(i-1,size-1)] = memo[(i, size-1)] & sets[i-1]
+        right_memo[i-1] = right_memo[i] & sets[i-1]
 
     max_intersection = 0
     best_ignored_intersection = 0
     for i in range(size):
         temp_intersection = set()
         if i == 0:
-            temp_intersection = memo[(1, size-1)]
+            temp_intersection = right_memo[1]
         elif i == size-1:
-            temp_intersection = memo[(0, size-2)]
+            temp_intersection = left_memo[size-2]
         else:
-            temp_intersection = memo[(0, i-1)] & memo[(i+1, size-1)]
+            temp_intersection = left_memo[i-1] & right_memo[i+1]
         if len(temp_intersection) > max_intersection:
             max_intersection = len(temp_intersection)
             best_ignored_intersection = i
