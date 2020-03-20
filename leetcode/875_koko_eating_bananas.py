@@ -1,11 +1,9 @@
 from math import ceil
+from functools import reduce
 
 class Solution:
     def time_to_eat(self, piles, bananas_per_hour):
-        count = 0
-        for pile in piles:
-            count += ceil(pile / bananas_per_hour)
-        return count
+        return reduce(lambda acc, pile: acc + ceil(pile / bananas_per_hour), piles, 0)
 
     def minEatingSpeed(self, piles, H):
         low = 1
