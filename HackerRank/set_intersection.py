@@ -2,16 +2,24 @@
 Given a list of sets, find the set that should be excluded to
 maximize the size of the intersection of the remaining sets
 '''
-def max_intersection(sets):
-    size = len(sets)
-    if size <= 1:
-        return -1
+
+def generate_memos(sets, size):
     left_memo = {0: sets[0]}
     for i in range(1, size):
         left_memo[i] = left_memo[i-1] & sets[i]
     right_memo = {size-1: sets[size-1]}
     for i in range(size-1, -1, -1):
         right_memo[i-1] = right_memo[i] & sets[i-1]
+
+    return left_memo, right_memo
+
+
+def max_intersection(sets):
+    size = len(sets)
+    if size <= 1:
+        return -1
+
+    left_memo, right_memo = generate_memos(sets, size)
 
     max_intersection = 0
     best_ignored_intersection = 0
@@ -28,11 +36,25 @@ def max_intersection(sets):
             best_ignored_intersection = i
     return best_ignored_intersection
 
+'''
+brute force:
+time: O(len(sets)^2 * len(set))
+space: O(len(set))
 
-sets = [{3,4,6,9},
-        {3,4,6,9},
-        {3,4,9,6},
-        {2,3,4,5,6}
+memoized:
+time: O(len(sets) * len(set))
+space: O(len(sets) * len(set))
+
+Bottlenecks
+Unnecessary work
+Duplicate work
+'''
+
+
+sets = [{3, 4, 6, 9},
+        {3, 4, 6, 9},
+        {3, 4, 9, 6},
+        {2, 3, 4, 5, 6}
         ]
 
 print(max_intersection(sets))

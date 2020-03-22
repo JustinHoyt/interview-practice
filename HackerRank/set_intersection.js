@@ -22,9 +22,9 @@ const setToExclude = (sets) => {
     const leftMemo = {};
     sets.reduce((acc, set, i) => leftMemo[i] = (intersection(acc, set)), sets[0]);
     const rightMemo = {};
-    [...sets].reverse().reduce((acc, set, i) => {
-            return rightMemo[lastIdx - i] = (intersection(acc, set))
-        }, sets[0]);
+    [...sets].reverse().reduce(
+        (acc, set, i) => rightMemo[lastIdx - i] = (intersection(acc, set)
+    ), sets[0]);
 
     const intersectSizes = sets.map((_, i) => {
         if(i === 0) return rightMemo[0].size;

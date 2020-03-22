@@ -3,13 +3,10 @@ from typing import List
 
 class Solution:
     def explore_island(self, matrix, visited, i, j):
-        if (i >= 0 and
-                j >= 0 and
-                i < len(matrix) and
-                j < len(matrix[i]) and
+        if (0 <= i < len(matrix) and
+                0 <= j < len(matrix[i]) and
                 matrix[i][j] == 1 and
                 (i, j) not in visited):
-
             visited[(i, j)] = 1
             self.explore_island(matrix, visited, i - 1, j)
             self.explore_island(matrix, visited, i + 1, j)
