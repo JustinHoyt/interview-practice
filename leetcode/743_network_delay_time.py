@@ -8,20 +8,16 @@ class Solution:
     def networkDelayTime(self, times: List[List[int]], num_nodes: int, origin_idx: int) -> int:
         graph = defaultdict(list)
         distances = {}
+        shortest_path_queue = [(0, origin_idx)]
+
         for start, end_idx, weight in times:
             graph[start].append((weight, end_idx))
-            distances[start] = inf
-            distances[end_idx] = inf
-
-        distances[origin_idx] = 0
-        shortest_path_queue = []
-        visited = set()
 
         def find_next() -> int:
             found = False
             while len(shortest_path_queue) > 0 and not found:
                 weight, next_idx = heappop(shortest_path_queue)
-                if next_idx not in visited:
+                if next_idx not in distances:
                     return next_idx
 
             return -1
@@ -30,10 +26,10 @@ class Solution:
             if start_idx == -1:
                 return
 
-            visited.add(start_idx)
+            distances[start_idx] = heappop(shortest_path_queue)
             for weight, end_idx in graph[start_idx]:
                 distances[end_idx] = min(distances[end_idx], distances[start_idx] + weight)
-                if end_idx not in visited:
+                if end_idx not in distances:
                     heappush(shortest_path_queue, (distances[end_idx], end_idx))
 
             bfs(find_next())
