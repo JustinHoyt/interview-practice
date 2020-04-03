@@ -17,7 +17,7 @@ def is_same_output(str1, str2):
         i = next_char(str1, i-1)
         j = next_char(str2, j-1)
 
-    return next_char(str1, i) == -1 == next_char(str2, j)
+    return i == j
 
 
 
