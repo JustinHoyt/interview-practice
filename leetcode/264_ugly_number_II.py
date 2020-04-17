@@ -1,5 +1,6 @@
 from timeit import default_timer as timer
 
+# optimal generative approach
 def nth_ugly_num(n):
     ugly = [1]
     idx_2 = 0
@@ -20,7 +21,9 @@ def nth_ugly_num(n):
         n -= 1
     return ugly[-1]
 
-
+# Dynamic programming approach for checking every number up to the n'th ugly number.
+# Despite using DP, this solution is still too slow because of the exponential growth of 
+# the distance between ugly numbers.
 def nth_ugly_num_DP(n):
     calculations = 0
     ugly_memo = {1, 2, 3, 4, 5}
@@ -47,36 +50,12 @@ def nth_ugly_num_DP(n):
     print("calculations:", calculations)
     return num - 1
 
-
-# print("1th number is:", nth_ugly_num(1))
-# print("2th number is:", nth_ugly_num(2))
-# print("3th number is:", nth_ugly_num(3))
-# print("4th number is:", nth_ugly_num(4))
-# print("5th number is:", nth_ugly_num(5))
-# print("6th number is:", nth_ugly_num(6))
-# print("7th number is:", nth_ugly_num(7))
-# print("8th number is:", nth_ugly_num(8))
-# print("9th number is:", nth_ugly_num(9))
-# print("10th number is:", nth_ugly_num(10))
-# print("11th number is:", nth_ugly_num(11))
-# print("12th number is:", nth_ugly_num(12))
-# print("13th number is:", nth_ugly_num(13))
-# print("14th number is:", nth_ugly_num(14))
-# print("15th number is:", nth_ugly_num(15))
-# print("16th number is:", nth_ugly_num(16))
-# print("17th number is:", nth_ugly_num(17))
-# print("100th number is:", nth_ugly_num(100))
-# print("200th number is:", nth_ugly_num(200))
-# print("400th number is:", nth_ugly_num(400))
-# print("800th number is:", nth_ugly_num(800))
-
 start = timer()
-print("mine 1690 -", nth_ugly_num(1690))
+print("generative for n=1690 -", nth_ugly_num(1690))
 end = timer()
 print(end - start)
 
-sample = 1000
 start = timer()
-print(sample, "-", nth_ugly_num_DP(sample))
+print("DP checking all nums for n=1000 -", nth_ugly_num_DP(1000))
 end = timer()
 print(end - start)
