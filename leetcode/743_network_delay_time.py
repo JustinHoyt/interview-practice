@@ -52,6 +52,7 @@ class Solution:
         return max_distance
 
 
+
 print(Solution().networkDelayTime([[2,1,1],[2,3,1],[3,4,1], [4,5,2], [2,5,10]], 5, 2))
 print(Solution().networkDelayTime([[1,2,1]], 2, 2))
 print(Solution().networkDelayTime([[1,2,1],[2,3,7],[1,3,4],[2,1,2]], 4, 1))

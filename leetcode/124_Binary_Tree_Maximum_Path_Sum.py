@@ -5,7 +5,6 @@ class Node:
         self.right = None
 
 class Solution:
-
     def maxPathSum(self, root):
         highest_sum = float('-INF')
 
@@ -41,15 +40,15 @@ sol = Solution()
 # root.right.left = Node(15)
 # root.right.right = Node(7)
 
-root = Node(5)
-root.left = Node(4)
-root.right = Node(8)
-root.left.left = Node(11)
-root.right.left = Node(13)
-root.right.right = Node(4)
-root.right.left.left = Node(7)
-root.right.left.right = Node(2)
-root.right.right.right = Node(1)
+root = Node(-5)
+# root.left = Node(4)
+# root.right = Node(8)
+# root.left.left = Node(11)
+# root.right.left = Node(13)
+# root.right.right = Node(4)
+# root.right.left.left = Node(7)
+# root.right.left.right = Node(2)
+# root.right.right.right = Node(1)
 
 # [5,4,8,11,null,13,4,7,2,null,null,null,1]
 
