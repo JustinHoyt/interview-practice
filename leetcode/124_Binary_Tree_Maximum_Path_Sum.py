@@ -14,8 +14,8 @@ class Solution:
             if node is None:
                 return 0
 
-            left = dfs(node.left)
-            right = dfs(node.right)
+            left = max(dfs(node.left), 0)
+            right = max(dfs(node.right), 0)
             best_child = max(left, right)
 
             sum_with_best_child = node.val + best_child
@@ -24,8 +24,6 @@ class Solution:
 
             highest_sum = max(sum_with_both_children, highest_sum)
 
-            if sum_with_best_child < 0:
-                return 0
             return sum_with_best_child
 
         dfs(root)

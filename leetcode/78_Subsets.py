@@ -1,6 +1,5 @@
 from typing import List
 import sys
-# sys.setrecursionlimit(1500)
 
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
