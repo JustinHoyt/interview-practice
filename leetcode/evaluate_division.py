@@ -7,29 +7,27 @@ class Solution:
 
         def make_graph(equations, values):
             graph = defaultdict(dict)
-            for equation, value in zip(equations, values):
-                start, end = equation
+            for (start, end), value in zip(equations, values):
                 graph[start][end] = value
                 graph[end][start] = 1/value
             return graph
 
         graph = make_graph(equations, values)
-        print(graph)
 
         def add_quotient(start, end, visited, sofar=1):
             if start == end and end in graph:
-                result.append(sofar)
+                return 1
             visited.add(start)
 
             for node, weight in graph[start].items():
                 if node not in visited:
-                    add_quotient(node, end, visited, sofar * weight)
+                    path_cost = add_quotient(node, end, visited, sofar * weight)
+                    if path_cost != -1:
+                        return path_cost * weight
+            return -1
 
         for start, end in queries:
-            size = len(result)
-            add_quotient(start, end, set())
-            if len(result) == size:
-                result.append(-1)
+            result.append(add_quotient(start, end, set()))
 
         return result
 
