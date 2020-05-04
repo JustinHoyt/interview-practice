@@ -15,36 +15,36 @@ class Solution:
 
             return -1
 
-        # traverses all nodes, shortest (best) path at a time to find all the shortest distances
-        def best_first_search(start_idx=origin_idx):
-            if start_idx == -1:
-                return
-
-            for weight, end_idx in graph[start_idx]:
-                # if we found a shorter path to a node we want to update it and add it to our priority queue
-                if distances[start_idx] + weight < distances[end_idx]:
-                    distances[end_idx] = distances[start_idx] + weight
-                    heappush(shortest_path_queue, (distances[end_idx], end_idx))
-
-            best_first_search(next_node())
-
-
         # representation of directional graph with weights
         graph = defaultdict(list)
+        for start, end_idx, weight in times:
+            graph[start].append((weight, end_idx))
+
         # keeps track of distances to nodes
         distances = {}
         # initialize graph with edges weights to infinity because they haven't been visited yet
-        for start, end_idx, weight in times:
-            graph[start].append((weight, end_idx))
-            distances[start] = distances[end_idx] = inf
+        for i in range(1, num_nodes+1):
+            distances[i] = inf
 
         # our origin is initialized to a weight of 0 because we're already there
         distances[origin_idx] = 0
+        visited = set()
 
         # This queue lets us find the best node to traverse faster than checking every unvisited node
-        shortest_path_queue = []
+        shortest_path_queue = [(0, origin_idx)]
 
-        best_first_search()
+        while shortest_path_queue:
+            curr_weight, curr_node = heappop(shortest_path_queue)
+            if curr_node in visited:
+                continue
+
+            visited.add(curr_node)
+            for weight, end_node in graph[curr_node]:
+                if curr_weight + weight < distances[end_node]:
+                    distances[end_node] = curr_weight + weight
+                    heappush(shortest_path_queue, (distances[end_node], end_node))
+
+        # best_first_search()
         max_distance = max(distances.values())
         # make sure we visited every node
         if max_distance == inf or len(distances) < num_nodes:
