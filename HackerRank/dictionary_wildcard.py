@@ -25,12 +25,12 @@ class Dictionary:
     def __init__(self, words):
         self.trie = defaultdict(dict)
         [ self.add(word) for word in words ]
-        
+
     def is_match(self, query):
         def word_match(node, idx=0):
             if idx == len(query):
                 return "." in node
-            
+
             letter = query[idx]
             if query[idx] == "*":
                 return True in [ word_match(child, idx+1) for child in node.values() ]
@@ -39,7 +39,7 @@ class Dictionary:
                 return False
 
             return word_match(node[letter], idx+1)
-            
+
         return word_match(self.trie)
 
     def add(self, word):

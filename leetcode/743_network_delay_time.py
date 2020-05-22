@@ -7,14 +7,6 @@ from timeit import Timer
 
 class Solution:
     def networkDelayTime(self, times: List[List[int]], num_nodes: int, origin_idx: int) -> int:
-        # gets the next node for our best first search
-        def next_node() -> int:
-            if shortest_path_queue:
-                _, next_idx = heappop(shortest_path_queue)
-                return next_idx
-
-            return -1
-
         # representation of directional graph with weights
         graph = defaultdict(list)
         for start, end_idx, weight in times:

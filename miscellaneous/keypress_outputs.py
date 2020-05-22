@@ -26,7 +26,7 @@ print(is_same_output("world", "<<worrr<<ld"))
 print(is_same_output("", "<<wr<<"))
 print(is_same_output("w<<i", "c<<irrr<<ld<<<"))
 print(is_same_output("", ""))
-print(is_same_output("", "a<"))
+print(is_same_output("", "a<<"))
 print(is_same_output("", "<<<"))
 
 print()
