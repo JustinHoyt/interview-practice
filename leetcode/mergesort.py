@@ -1,6 +1,6 @@
 def merge(nums, start, end):
     result = []
-    while
+    while True:
         if nums1[0] < nums2[0]:
             result.append(nums1[0])
             del nums1[0]

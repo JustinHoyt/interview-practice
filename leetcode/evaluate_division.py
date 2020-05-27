@@ -4,15 +4,11 @@ from typing import List
 class Solution:
     def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
         result = []
+        graph = defaultdict(dict)
 
-        def make_graph(equations, values):
-            graph = defaultdict(dict)
-            for (start, end), value in zip(equations, values):
-                graph[start][end] = value
-                graph[end][start] = 1/value
-            return graph
-
-        graph = make_graph(equations, values)
+        for (start, end), value in zip(equations, values):
+            graph[start][end] = value
+            graph[end][start] = 1/value
 
         def add_quotient(start, end, visited, sofar=1):
             if start == end and end in graph:

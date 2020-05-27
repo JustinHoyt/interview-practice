@@ -20,12 +20,12 @@ def merge(left, right):
     if front < len(right):
         result.extend(right[front:])
     return result
- 
+
 
 def merge_sort(array):
     if len(array) < 2:
         return array
-     
+
     middle = len(array) // 2
     left = merge_sort(array[middle:])
     right = merge_sort(array[:middle])
