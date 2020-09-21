@@ -8,20 +8,24 @@ isMember(["foo", "bar", "baz"], "f*o")
 will return true since the "*" matches the first "o" in foo
 
 
+function dictionary_wildcard(words, query) {
+    return words.filter(word => word.length == query.length)
+                .some(word => wordsMatch(List(word), List(query)));
+}
+
 isMember(["foo", "bar", "baz"], "**")
 will return false since there are no two-letter words in the array
 */
+const R = require('ramda');
 
-const dictionary_wildcard = (words, query) => {
-    return words.filter(word => word.length == query.length)
-                .some(word => wordsMatch(word, query));
-};
+function dictionary_wildcard(words, query) {
+    const wordsMatch = R.curry((matcher, word1, word2) => R.compose(R.map(matcher), R.zip(word1, word2)));
 
-const wordsMatch = (word, query) => zip([...word], [...query]).every(charsMatch);
+    const charMatcher = ([wordChar, queryChar]) => wordChar === queryChar || queryChar === "*";
+    const queryMatches = wordsMatch(charMatcher, query);
 
-const charsMatch = ([wordChar, queryChar]) => wordChar === queryChar || queryChar === "*";
-
-const zip = (arr1, arr2) => arr1.map((ele, idx) => [ele, arr2[idx]]);
+    return R.compose(R.any(queryMatches), R.filter(word => word.length == query.length))(words);
+}
 
 const words = ["foo", "bar", "baz"];
 console.log(dictionary_wildcard(words, "b*r"));
