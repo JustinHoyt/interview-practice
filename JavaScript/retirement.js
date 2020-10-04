@@ -1,17 +1,25 @@
 const R = require('ramda');
 
+/**
+ * @param {*} props
+ * @returns
+ */
 function retirement(props) {
     const { growthPercentage, initialSavings, yearsOfSavings, annualSavingsRate } = props;
 
-    const growNetWorth = R.curry(function(amountSavedInPeriod, growthPercentage, initialAmount) {
-        return initialAmount * growthPercentage + amountSavedInPeriod;
-    });
+    /** @type {(amountSavedYearly: number, growthPercentage: number, initialAmount: number) => number} */
+    const growNetWorth = R.curry(
+        (amountSavedYearly, growthPercentage, initialAmount) => initialAmount * growthPercentage + amountSavedYearly
+    );
 
-    const growNetWorthYearly = growNetWorth(annualSavingsRate, growthPercentage);
+    /** @type {(fn: (a) => a, n: number) => fn: (a) => a} */
+    const applyN = R.compose(R.reduceRight(R.compose, R.identity), R.repeat);
 
-    const netWorth = R.reduceRight(R.compose, R.identity, R.repeat(growNetWorthYearly, yearsOfSavings))(initialSavings);
+    /** @type {number} */
+    const netWorth = applyN(growNetWorth(annualSavingsRate, growthPercentage), yearsOfSavings)(initialSavings);
 
-    var formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+    const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+
     return formatter.format(netWorth);
 }
 
