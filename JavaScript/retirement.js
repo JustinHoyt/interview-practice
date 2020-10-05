@@ -1,11 +1,21 @@
 const R = require('ramda');
 
 /**
- * @param {*} props
- * @returns
+ * @typedef {Object} Prop
+ * @property {number} [growthPercentage]
+ * @property {number} [yearsOfSavings]
+ * @property {number} initialSavings
+ * @property {number} annualSavingsRate
+ */
+
+/**
+ * Calculates retirement net worth based on a simple set of params
+ *
+ * @param {Prop} props
+ * @returns {number}
  */
 function retirement(props) {
-    const { growthPercentage, initialSavings, yearsOfSavings, annualSavingsRate } = props;
+    const { growthPercentage=1.07, initialSavings, yearsOfSavings=40, annualSavingsRate } = props;
 
     /** @type {(amountSavedYearly: number, growthPercentage: number, initialAmount: number) => number} */
     const growNetWorth = R.curry(
@@ -18,9 +28,10 @@ function retirement(props) {
     /** @type {number} */
     const netWorth = applyN(growNetWorth(annualSavingsRate, growthPercentage), yearsOfSavings)(initialSavings);
 
-    const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+    /** @type {Intl.NumberFormatOptions} formatOptions */
+    const formatOptions = {style: 'currency', currency: 'USD'}
 
-    return formatter.format(netWorth);
+    return Intl.NumberFormat(formatOptions).format(netWorth);
 }
 
-console.log(retirement({growthPercentage: 1.07, initialSavings: 100000, yearsOfSavings: 20, annualSavingsRate: 100000}));
+console.log(retirement({initialSavings: 10000, annualSavingsRate: 20000}));
