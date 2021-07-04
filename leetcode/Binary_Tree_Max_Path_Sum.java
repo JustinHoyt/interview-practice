@@ -41,8 +41,8 @@ public class Binary_Tree_Max_Path_Sum {
 }
 
 
-Binary_Tree_Max_Path_Sum sol = new Binary_Tree_Max_Path_Sum();
-sol.maxPathSum(new Node(3));
+//Binary_Tree_Max_Path_Sum sol = new Binary_Tree_Max_Path_Sum();
+//sol.maxPathSum(new Node(3));
 
 // # root = Node(-10)
 // # root.left = Node(9)

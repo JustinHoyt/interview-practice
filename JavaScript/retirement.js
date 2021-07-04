@@ -15,7 +15,7 @@ const R = require('ramda');
  * @returns {number}
  */
 function retirement(props) {
-    const { growthPercentage=1.07, initialSavings, yearsOfSavings=40, annualSavingsRate } = props;
+    const { growthPercentage=1.07, initialSavings, yearsOfSavings=10, annualSavingsRate } = props;
 
     /** @type {(amountSavedYearly: number, growthPercentage: number, initialAmount: number) => number} */
     const growNetWorth = R.curry(
@@ -34,4 +34,4 @@ function retirement(props) {
     return Intl.NumberFormat(formatOptions).format(netWorth);
 }
 
-console.log(retirement({initialSavings: 10000, annualSavingsRate: 20000}));
+console.log(retirement({initialSavings: 350000, annualSavingsRate: 80000}));

@@ -33,3 +33,18 @@ print()
 # False
 print(is_same_output("<<<", "<<worrr<<ld"))
 print(is_same_output("w<<i", "c<<irrr<<ldd<<<"))
+
+
+'''
+Notes
+* if you ask to jump into a solution, they may let you or ask for improvement
+    * more likely to ask for improvement on an onsite
+* have consistent spacing
+    * maybe make a 4 space macro button?
+* making a test suite is a better use of time if you want to write the invocation part
+* know how to use a deque
+* other python data structs to know
+* you need to have a better idea of what you're implementing before you go for it
+
+
+'''
