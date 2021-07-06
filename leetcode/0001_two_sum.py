@@ -32,3 +32,6 @@ def test_one_negative_int():
 
 def test_cannot_use_same_element():
     assert Solution().twoSum([-1,5,3,7], 10) == [2,3]
+
+if __name__ == "__main__":
+    test_two_positive_ints()

@@ -36,3 +36,6 @@ def test_even_palindrome():
 
 def test_empty_string():
     assert Solution().longestPalindrome('') == ""
+
+if __name__ == "__main__":
+    test_simple_palindrome()
