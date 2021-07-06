@@ -2,6 +2,8 @@ from typing import *
 
 class Solution:
     def convert(self, s: str, num_rows: int) -> str:
+        if num_rows == 1:
+            return s
         result = ''
         max_offset = (num_rows - 1) * 2
         offset_odd = max_offset
@@ -12,7 +14,6 @@ class Solution:
             for i in range(1, len(s)):
                 offset = offset_odd if (i % 2 == 1) else offset_even
                 offset = max_offset if (row == 0 or row == num_rows - 1) else offset
-                offset = 1 if (num_rows == 1) else offset
                 if prev_idx + offset >= len(s):
                     break
                 result += s[prev_idx + offset]
