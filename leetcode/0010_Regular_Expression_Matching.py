@@ -1,70 +1,81 @@
-from typing import Dict
-
+from typing import *
 
 class Solution:
-    def is_match_rec(self, string: str, pattern: str, string_idx: int,
-                     pattern_idx: int, memo: Dict) -> bool:
-        self.print_current_state(string, pattern, string_idx, pattern_idx)
-        key = (string_idx, pattern_idx)
-        if key in memo:
-            return memo[key]
-        is_zero_or_many = pattern_idx + 1 < len(pattern) and pattern[pattern_idx + 1] == "*"
-        if string_idx >= len(string) and pattern_idx >= len(pattern):
-            return True
-        if string_idx >= len(string) and pattern_idx == len(pattern) - 2 and is_zero_or_many:
-            return True
-        if (string_idx >= len(string) or pattern_idx >= len(pattern)) and not is_zero_or_many:
-            return False
-
-        if is_zero_or_many:
-            # evaluate pattern index, and move string idx
-            is_successful_eval = False
-            if string_idx < len(string):
-                is_successful_eval = ((string[string_idx] == pattern[pattern_idx] or pattern[pattern_idx] == ".")
-                                      and self.is_match_rec(string, pattern, string_idx + 1, pattern_idx, memo))
-            # do not evaluate pattern index and move on
-            is_successful_no_eval = self.is_match_rec(string, pattern, string_idx,
-                                                      pattern_idx + 2, memo)
-            memo[key] = is_successful_eval or is_successful_no_eval
-            return is_successful_eval or is_successful_no_eval
-
-        if pattern[pattern_idx] == string[string_idx] or pattern[pattern_idx] == ".":
-            memo[key] = self.is_match_rec(string, pattern, string_idx + 1, pattern_idx + 1, memo)
-            return memo[key]
-
-        memo[key] = False
-        return False
-
-
-    def isMatch(self, string, pattern) -> bool:
-        string_idx, pattern_idx = 0, 0
+    def isMatch(self, phrase: str, regex: str) -> bool:
         memo = {}
-        return self.is_match_rec(string, pattern, string_idx, pattern_idx, memo)
+        def has_kleene_star(regex_idx):
+            return True if regex_idx + 1 < len(regex) and regex[regex_idx + 1] == '*' else False
+        
+        def only_kleene_stared_chars_from(regex_idx):
+            while regex_idx < len(regex):
+                if not has_kleene_star(regex_idx): return False
+                regex_idx += 2
+            return True
 
-    def print_current_state(self, string, pattern, string_idx, pattern_idx):
-        for _ in range(pattern_idx):
-            print(" ", end="")
-        print("V")
-        print(pattern)
-        for _ in range(string_idx):
-            print(" ", end="")
-        print("V")
-        print(string)
-        print("pattern_idx", pattern_idx)
-        print("string_idx", string_idx)
-        input()
+        def matches(phrase_idx, regex_idx):
+            return phrase[phrase_idx] == regex[regex_idx] or regex[regex_idx] == '.'
+
+        def match_rec(phrase_idx, regex_idx):
+            key = (phrase_idx, regex_idx)
+            match = False
+            if key in memo:
+                return memo[key]
+
+            if regex_idx >= len(regex) and phrase_idx >= len(phrase): return True
+            if regex_idx >= len(regex): return False
+            if phrase_idx >= len(phrase): return only_kleene_stared_chars_from(regex_idx)
+
+            if has_kleene_star(regex_idx):
+                match_kleene_char = False
+                if matches(phrase_idx, regex_idx):
+                    match_kleene_char = match_rec(phrase_idx + 1, regex_idx)
+                skip_kleene_char = match_rec(phrase_idx, regex_idx + 2)
+                match = match_kleene_char or skip_kleene_char
+            else:
+                if matches(phrase_idx, regex_idx):
+                    match = match_rec(phrase_idx + 1, regex_idx + 1)
+                else:
+                    match = False
+
+            memo[key] = match
+            return match
+
+        return match_rec(0, 0)
 
 
-SOL = Solution()
-print("these should be true")
-print(SOL.isMatch("abbbc", "a*b*c"))
-print(SOL.isMatch("abbbc", "a*a*b*c*"))
-print(SOL.isMatch("a", ".*"))
-print(SOL.isMatch("a", "a*"))
-print(SOL.isMatch("aa", "a*"))
-print(SOL.isMatch("aa", "a*."))
-print(SOL.isMatch("aa", "a.*c*"))
-print(SOL.isMatch("aaaaaaaaaaaaab", "a*a*a*a*a*a*a*a*a*a*a*a*b"))
-print()
-print("these should be false")
-print(SOL.isMatch("aa", "a*c"))
+def test_happy_path_matches():
+    assert Solution().isMatch('ab', 'ab') == True
+
+def test_simple_kleene_star_matches():
+    assert Solution().isMatch('aaa', 'a*') == True
+
+def test_simple_wildcard_with_kleene_star_matches():
+    assert Solution().isMatch('ab', '.*') == True
+
+def test_kleene_star_zero_matches_at_start():
+    assert Solution().isMatch('aab', 'c*a*b') == True
+
+def test_kleene_star_zero_matches_at_end():
+    assert Solution().isMatch('aab', 'a*bc*d*e*') == True
+
+def test_kleene_star_zero_matches_at_ends():
+    assert Solution().isMatch('aab', 'c*a*bc*') == True
+
+def test_empty_regex():
+    assert Solution().isMatch('aab', '') == False
+
+def test_empty_phrase():
+    assert Solution().isMatch('', 'a') == False
+
+def test_empty_phrase_and_regex():
+    assert Solution().isMatch('', '') == True
+
+def test_kleene_does_not_over_match():
+    assert Solution().isMatch('aab', 'a*ab') == True
+
+def test_runtime_speed():
+    assert Solution().isMatch('aaaaaaaaaaaaaaaab', 'a*a*a*a*a*a*a*a*a*a*a*a*a*c') == False
+
+
+if __name__ == "__main__":
+    test_happy_path_matches()
