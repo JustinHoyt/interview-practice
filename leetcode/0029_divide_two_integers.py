@@ -11,6 +11,7 @@ class Solution:
             times_added = 1 << i
             return times_added + self.divide(dividend - (divisor << i), divisor)
 
+        # To handle 32 bit signed int bound test
         if dividend == -(1 << 31) and divisor == -1:
             return (1 << 31) - 1
 
