@@ -1,17 +1,48 @@
+from typing import *
+
 class Solution:
-    def permuteUnique(self, nums):
-        ans = [[]]
-        for num in nums:
-            new_ans = []
-            for permutation in ans:
-                for i in range(len(permutation) + 1):
-                    new_ans.append(permutation[:i] + [num] + permutation[i:])
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        def swap(i, j):
+            nums[i], nums[j] = nums[j], nums[i]
 
-                    # if we have the same num for our i'th permutation we want to break out
-                    # to avoid duplicate permutations
-                    if i < len(permutation) and permutation[i] == num:
-                        break
-            ans = new_ans
-        return ans
+        def permute_rec(idx = 0) -> None:
+            if idx == len(nums):
+                results.append(nums.copy())
 
-print(Solution().permuteUnique([1,1,2]))
+            swaps = set()
+            for i in range(idx, len(nums)):
+                key = (nums[idx], nums[i])
+                if key in swaps: continue
+                swaps.add(key)
+
+                swap(idx, i)
+                permute_rec(idx + 1)
+                swap(idx, i)
+
+        results: List[List[int]] = []
+
+        if len(nums) == 0:
+            return []
+        permute_rec()
+        print(results)
+        return results
+
+
+def test_happy_path():
+    assert Solution().permuteUnique([1,2,3]) == [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,2,1],[3,1,2]]
+
+def test_with_identical_numbers():
+    assert Solution().permuteUnique([1,1,2]) == [[1,1,2], [1,2,1], [2,1,1]]
+
+def test_with_sets_of_identical_numbers():
+    assert Solution().permuteUnique([1,1,2,2]) == [[1,1,2,2], [1,2,1,2], [1,2,2,1], [2,1,1,2], [2,1,2,1], [2,2,1,1]]
+
+def test_one_element():
+    assert Solution().permuteUnique([1]) == [[1]]
+
+def test_zero_elements():
+    assert Solution().permuteUnique([]) == []
+
+
+if __name__ == "__main__":
+    test_with_identical_numbers()
