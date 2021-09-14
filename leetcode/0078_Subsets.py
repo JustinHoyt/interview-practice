@@ -1,23 +1,30 @@
-from typing import List
-import sys
+from typing import *
 
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
-        result = [[]]
-
-        def generate_subsets(subset, i):
-            if i == len(nums):
-                result.append(subset)
+        results: List[List[int]] = []
+        def subsets_rec(sofar: List[int], idx: int):
+            if idx == len(nums):
+                results.append(sofar)
                 return
+            
+            subsets_rec(sofar.copy(), idx + 1)
+            sofar.append(nums[idx])
+            subsets_rec(sofar.copy(), idx + 1)
 
-            generate_subsets(subset, i + 1)
-            new_subset = subset[:]
-            new_subset.append(nums[i])
-            generate_subsets(new_subset, i + 1)
+        subsets_rec([], 0)
+        print(results)
+        return results
 
-        for i, num in enumerate(nums):
-            generate_subsets(nums[i:i+1], i+1)
 
-        return result
+def test_happy_path():
+    assert Solution().subsets([1,2,3]) == [[],[3],[2],[2,3],[1],[1,3],[1,2],[1,2,3]]
 
-print(Solution().subsets([1,2,3]))
+def test_single_element():
+    assert Solution().subsets([0]) == [[],[0]]
+
+def test_empty_list():
+    assert Solution().subsets([]) == [[]]
+
+if __name__ == "__main__":
+    test_happy_path()
