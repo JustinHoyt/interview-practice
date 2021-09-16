@@ -1,53 +1,64 @@
-class Node:
+class TreeNode:
     def __init__(self, val):
         self.val = val
         self.left = None
         self.right = None
 
 class Solution:
-    def maxPathSum(self, root):
-        highest_sum = float('-INF')
+    def maxPathSum(self, root: TreeNode):
+        max_path = root.val if root else 0
+        def max_path_sum(node: TreeNode):
+            nonlocal max_path
+            if not node: return 0
 
-        def dfs(node):
-            nonlocal highest_sum
+            max_left = max_path_sum(node.left)
+            max_right = max_path_sum(node.right)
 
-            if node is None:
-                return 0
+            max_branch = max(
+                max_left + node.val,
+                max_right + node.val,
+                node.val
+            )
+            max_path = max(
+                max_left + node.val + max_right,
+                max_branch,
+                max_path
+            )
+            return max_branch
 
-            left = max(dfs(node.left), 0)
-            right = max(dfs(node.right), 0)
-            best_child = max(left, right)
-
-            sum_with_best_child = node.val + best_child
-
-            sum_with_both_children = node.val + left + right
-
-            highest_sum = max(sum_with_both_children, highest_sum)
-
-            return sum_with_best_child
-
-        dfs(root)
-        return highest_sum
+        max_path_sum(root)
+        return max_path
 
 
-sol = Solution()
+'''
+     -10
+  9       20
+// //   15   7
+'''
+def test_happy_path():
+    root = TreeNode(-10)
+    root.left = TreeNode(9)
+    root.right = TreeNode(20)
+    root.left.left = None
+    root.left.right = None
+    root.right.left = TreeNode(15)
+    root.right.right = TreeNode(7)
+    assert Solution().maxPathSum(root) == 42
 
-# root = Node(-10)
-# root.left = Node(9)
-# root.right = Node(20)
-# root.right.left = Node(15)
-# root.right.right = Node(7)
+'''
+     -1
+  -2       10
+-6  //   -3  -6
+'''
+def test_negative_sums():
+    root = TreeNode(-1)
+    root.left = TreeNode(-2)
+    root.right = TreeNode(10)
+    root.left.left = TreeNode(-6)
+    root.left.right = None
+    root.right.left = TreeNode(-3)
+    root.right.right = TreeNode(-6)
+    assert Solution().maxPathSum(root) == 10
 
-root = Node(-5)
-# root.left = Node(4)
-# root.right = Node(8)
-# root.left.left = Node(11)
-# root.right.left = Node(13)
-# root.right.right = Node(4)
-# root.right.left.left = Node(7)
-# root.right.left.right = Node(2)
-# root.right.right.right = Node(1)
-
-# [5,4,8,11,null,13,4,7,2,null,null,null,1]
-
-print(sol.maxPathSum(root))
+if __name__ == "__main__":
+    test_happy_path()
