@@ -12,43 +12,54 @@ class Solution:
             '8': ['t', 'u', 'v'],
             '9': ['w', 'x', 'y', 'z'],
         }
-        results = []
+        results: List[str] = []
 
-        def generatePerm(idx=0, so_far=''):
-            if idx == len(digits): 
-                results.append(so_far)
+        def generateCombinations(sofar='', idx=0):
+            nonlocal results
+            if len(digits) == len(sofar):
+                results.append(sofar)
                 return
-            
-            for char in digits_to_chars[digits[idx]]:
-                generatePerm(idx + 1, so_far + char)
 
-        if len(digits) > 0:
-            generatePerm()
+            for letter in digits_to_chars[digits[idx]]:
+                generateCombinations(f'{sofar}{letter}', idx+1)
+        
+        if digits:
+            generateCombinations()
         return results
+    
+    def letterCombinations2(self, digits: str) -> List[str]:
+        digits_to_chars = {
+            '2': ['a', 'b', 'c'],
+            '3': ['d', 'e', 'f'],
+            '4': ['g', 'h', 'i'],
+            '5': ['j', 'k', 'l'],
+            '6': ['m', 'n', 'o'],
+            '7': ['p', 'q', 'r', 's'],
+            '8': ['t', 'u', 'v'],
+            '9': ['w', 'x', 'y', 'z'],
+        }
 
-    def letterCombinations2(self, digits):
-        digit_map = {"2": "abc", "3": "def", "4": "ghi", "5": "jkl",
-                     "6": "mno", "7": "pqrs", "8": "tuv", "9": "wxyz"}
-
-        def combinations_rec(idx=0):
-            result = []
+        def generateCombinations(idx=0):
             if idx == len(digits):
                 return ['']
+            
+            results = []
+            for letter in digits_to_chars[digits[idx]]:
+                for combination in generateCombinations(idx + 1):
+                    results.append(f'{letter}{combination}')
+            
+            return results
 
-            for letter in list(digit_map[digits[idx]]):
-                for combination in combinations_rec(idx+1):
-                    result.append(f"{letter}{combination}")
+        return generateCombinations() if digits else []
 
-            return result
 
-        if digits == "":
-            return []
-        return combinations_rec()
+
+
 
 
 def test_happy_path():
-    assert Solution().letterCombinations("23") == ["ad","ae","af","bd","be","bf","cd","ce","cf"]
-    assert Solution().letterCombinations2("23") == ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+    assert sorted(Solution().letterCombinations("23")) == sorted(["ad","ae","af","bd","be","bf","cd","ce","cf"])
+    assert sorted(Solution().letterCombinations2("23")) == sorted(["ad","ae","af","bd","be","bf","cd","ce","cf"])
 
 def test_empty_case():
     assert Solution().letterCombinations("") == []
