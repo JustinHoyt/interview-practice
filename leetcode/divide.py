@@ -3,7 +3,7 @@ from timeit import default_timer as timer
 Divide without division or modulo
 '''
 
-# Cleanest solution
+# Cleanest solution: binary search
 def divide(numerator, denominator):
     low = 0
     high = numerator
