@@ -1,22 +1,40 @@
-import math as m
 from typing import List
+import math
 
 class Solution:
-    def coinChange(self, coins: List[int], amount: int) -> int:
-        def change(amount_left):
-            if amount_left == 0:
-                return 0
-            if amount_left <= 0:
-                return m.inf
-            fewest_ways = m.inf
-            for coin in coins:
-                fewest_ways = min(fewest_ways, change(amount_left - coin) + 1)
+    def coinChange(self, coins, amount):
+        memo = {}
+        coins.sort()
+        coins.reverse()
 
-            return fewest_ways
+        def coin_change_rec(so_far, coins_so_far):
+            key = so_far
+            if key in memo: return memo[key]
 
-        result = change(amount)
-        if result == m.inf:
-            return -1
-        return result
+            if so_far == amount:
+                memo[key] = 1
+                return memo[key]
+            elif so_far < amount:
+                temp_coins = math.inf
+                for coin in coins:
+                    temp_coins = min(temp_coins, coin_change_rec(so_far + coin, coins_so_far + 1))
+                return temp_coins + 1
+            else:
+                return math.inf
 
-print(Solution().coinChange([1,2,5], 11))
+        if amount == 0: return 0
+        result = coin_change_rec(0, 0)
+        return -1 if result == math.inf else result
+
+
+def test_zero():
+    assert Solution().coinChange([1,2,5], 0) == 0
+
+def test_no_result():
+    assert Solution().coinChange([2,5], 3) == -1
+
+def test_happy_path():
+    assert Solution().coinChange([1,2,5], 100) == 3
+
+if __name__ == "__main__":
+    test_happy_path()
