@@ -5,9 +5,8 @@ def test_pipe():
     add_one = partial(add, 1)
     double = partial(mul, 2)
 
-
     def pipe(*functions):
-        return reduce(lambda f, g: lambda x: g(f(x)), functions, lambda x: x)
+        return reduce(lambda f, g: lambda x: g(f(x)), functions)
 
     operations = [add_one, double, double]
 
