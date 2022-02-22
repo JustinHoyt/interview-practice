@@ -2,64 +2,58 @@ from typing import Dict
 
 
 class Node:
-    def __init__(self, key: int, val: int):
+    def __init__(self, key: int, val: int, left=None, right=None):
         self.val = val
         self.key = key
-        self.left = None
-        self.right = None
+        self.left = left
+        self.right = right
 
 
 class LRUCache:
     def __init__(self, capacity: int):
         self.capacity: int = capacity
         self.head: Node = None
-        self.map: Dict[int, Node] = {}
+        self.cache: Dict[int, Node] = {}
 
     def get(self, key: int) -> int:
-        if key in self.map:
-            self._delete_from_list(self.map[key])
-            self._add_to_list(self.map[key])
-            return self.head.val
+        if key in self.cache:
+            node = self.cache[key]
+            self.remove_node(node)
+            self.insert_node(node)
+            return node.val
         return -1
 
-    def _add_to_list(self, node: Node) -> None:
-        node.right = self.head
-        if self.head.left:
-            node.left = self.head.left
-        else:
-            node.left = self.head
-        self.head.left.right = node
-        self.head.left = node
-        self.head = node
-
-    def _delete_from_list(self, node: Node) -> None:
-        if node.left:
-            node.left.right = node.right
-        if node.right:
-            node.right.left = node.left
-        node.left = None
-        node.right = None
-
-    def put(self, key: int, value: int) -> None:
-        if key in self.map and self.map[key] is self.head:
-            self.head.val = value
-            return
-
-        node = Node(key, value)
-        if key in self.map:
-            self._delete_from_list(self.map[key])
-        if self.head is None or self.head.right is None or self.head.left is None:
+    def insert_node(self, node: Node) -> None:
+        if self.head is None:
             self.head = node
             self.head.left = node
             self.head.right = node
         else:
-            self._add_to_list(node)
+            node.right = self.head
+            node.left = self.head.left
+            self.head.left.right = node
+            self.head.left = node
+            self.head = node
 
-        self.map[key] = node
-        if len(self.map) > self.capacity:
-            key = self.head.left.key
-            self._delete_from_list(self.head.left)
-            del self.map[key]
+        self.cache[node.key] = node
+
+    def remove_node(self, node: Node) -> None:
+        if self.head == node:
+            self.head = self.head.right
+        node.left.right = node.right
+        node.right.left = node.left
+        del self.cache[node.key]
+
+
+    def put(self, key: int, value: int) -> None:
+        node = Node(key, value)
+        if key in self.cache:
+            self.remove_node(self.cache[key])
+
+        self.insert_node(node)
+
+        if len(self.cache) > self.capacity:
+            self.remove_node(self.head.left)
 
 
 def test_happy_path():
@@ -148,6 +142,7 @@ def test_large_input():
     cache.put(13, 4)
     cache.put(8, 18)
     cache.put(1, 7)
+    # null check error
     assert cache.get(6) == -1
     cache.put(9, 29)
     cache.put(8, 21)
@@ -163,6 +158,7 @@ def test_large_input():
     assert cache.get(5) == 18
     cache.put(3, 4)
     cache.put(11, 30)
+    # error no null check
     assert cache.get(12) == -1
     cache.put(4, 29)
     assert cache.get(3) == 4
@@ -212,4 +208,4 @@ def test_large_input():
 
 
 if __name__ == "__main__":
-    test_large_input()
+    test_single_capacity()
