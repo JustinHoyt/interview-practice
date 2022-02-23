@@ -21,7 +21,7 @@ class Solution:
 
         num_from_last = delete(head)
 
-        if num_from_last == n + 1:
+        if head and num_from_last == n + 1:
             return head.next
 
         return head
