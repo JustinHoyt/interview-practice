@@ -1,5 +1,6 @@
-from functools import partial, reduce, cache, lru_cache
+from functools import partial, reduce, lru_cache, cache
 from operator import add, mul
+from time import time, sleep
 
 class Node:
     def __init__(self, key: int, val: int, left=None, right=None):
@@ -8,13 +9,25 @@ class Node:
         self.left = left
         self.right = right
 
+
+double = partial(mul, 2)
+add_one = partial(add, 1)
+
+
+def pipe(*functions):
+    return reduce(lambda f, g: lambda x: g(f(x)), functions)
+
+
+def timer(function):
+    def wrapper(*args, **kwargs):
+        before = time()
+        function(*args, **kwargs)
+        print(f"Function took {time() - before} seconds")
+
+    return wrapper
+
+
 def test_pipe():
-    add_one = partial(add, 1)
-    double = partial(mul, 2)
-
-    def pipe(*functions):
-        return reduce(lambda f, g: lambda x: g(f(x)), functions)
-
     operations = [add_one, double, double]
 
     assert pipe(
@@ -35,7 +48,43 @@ def test_pipe():
 
 
     getattr(head, 'right')
-    print(getattrs(head, 'right', 'right', 'val'))
+    assert getattrs(head, 'right', 'right', 'val') == 3
+
+
+def test_apply_n():
+    def repeat(obj, n):
+        return [obj for _ in range(n)]
+
+
+    def apply_n_recursive(fn, n, x):
+        return fn(x) if n == 1 else fn(apply_n_recursive(fn, n - 1, x))
+
+
+    def apply_n(fn, num):
+        return pipe(*[fn for _ in range(num)])
+
+
+    def grow_one_year(yearly_savings, x):
+        return x * 1.07 + yearly_savings
+
+
+    def investment_return(investment, years, yearly_savings):
+        return pipe(
+            apply_n(partial(grow_one_year, yearly_savings), years),
+            "${:,.2f}".format,
+        )(investment)
+
+
+    assert investment_return(10000, 40, 5000) == "$1,147,920.14"
+
+
+def test_decorator():
+
+    @timer
+    def run():
+        sleep(0.01)
+
+    run()
 
 
 def test_cache():
@@ -43,14 +92,18 @@ def test_cache():
     def fib(n):
         return 1 if n <= 1 else fib(n - 1) + fib(n - 2)
 
-    print(fib(100))
+    assert fib(100) == 573147844013817084101
 
     @lru_cache
     def fib(n):
         return 1 if n <= 1 else fib(n - 1) + fib(n - 2)
 
-    print(fib(100))
+    assert fib(100) == 573147844013817084101
+
 
 if __name__ == "__main__":
     test_pipe()
+    test_cache()
+    test_apply_n()
+    test_decorator()
 

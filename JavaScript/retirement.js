@@ -23,7 +23,10 @@ function retirement(props) {
     );
 
     /** @type {(fn: (a) => a, n: number) => fn: (a) => a} */
-    const applyN = R.compose(R.reduceRight(R.compose, R.identity), R.repeat);
+    const applyN = R.pipe(
+        R.repeat,
+        R.reduce(R.pipe, R.identity),
+    );
 
     /** @type {number} */
     const netWorth = applyN(growNetWorth(annualSavingsRate, growthPercentage), yearsOfSavings)(initialSavings);
