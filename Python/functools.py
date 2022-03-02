@@ -1,5 +1,6 @@
 from functools import partial, reduce, lru_cache, cache
 from operator import add, mul
+from itertools import repeat
 from time import time, sleep
 
 class Node:
@@ -60,8 +61,8 @@ def test_apply_n():
         return fn(x) if n == 1 else fn(apply_n_recursive(fn, n - 1, x))
 
 
-    def apply_n(fn, num):
-        return pipe(*[fn for _ in range(num)])
+    def apply_n(fn, n):
+        return reduce(pipe, repeat(fn, n))
 
 
     def grow_one_year(yearly_savings, x):
