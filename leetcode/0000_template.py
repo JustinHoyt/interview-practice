@@ -2,7 +2,7 @@ from typing import *
 
 
 class Solution:
-    def function(self, nums: List[int], distance: int) -> List[int]:
+    def function(self):
         pass
 
 
