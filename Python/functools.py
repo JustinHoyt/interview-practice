@@ -1,5 +1,6 @@
 from functools import partial, reduce, lru_cache, cache
-from operator import add, mul
+from operator import add, mul, lt, pow, sub, abs, truediv
+from statistics import mean
 from itertools import repeat
 from time import time, sleep
 
@@ -13,10 +14,7 @@ class Node:
 
 double = partial(mul, 2)
 add_one = partial(add, 1)
-
-
-def pipe(*functions):
-    return reduce(lambda f, g: lambda x: g(f(x)), functions)
+pipe = lambda *functions: reduce(lambda f, g: lambda x: g(f(x)), functions)
 
 
 def timer(function):
@@ -26,6 +24,35 @@ def timer(function):
         print(f"Function took {time() - before} seconds")
 
     return wrapper
+
+
+def test_approx_sqrt():
+    flip = lambda f: lambda *a: f(*reversed(a))
+    div2 = lambda x: x / 2
+    square = lambda x: x ** 2
+    avg = lambda *args: mean(args)
+    variance = .001
+
+    in_tolerance = lambda x, y: pipe(
+       square,
+       partial(flip(sub), x),
+       abs
+    )(y)
+
+    approx_ = lambda x, y: y if in_tolerance(x,y) < variance else pipe(
+        partial(truediv, x),
+        partial(avg, y),
+        partial(approx_, x),
+    )(y)
+
+    approx = lambda x: pipe(
+        div2,
+        partial(approx_, x),
+        partial(round, ndigits=2)
+    )(x)
+
+    assert approx(2) == 1.41
+    assert approx(3) == 1.73
 
 
 def test_pipe():
