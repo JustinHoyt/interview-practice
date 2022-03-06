@@ -33,13 +33,13 @@ def test_approx_sqrt():
     avg = lambda *args: mean(args)
     variance = .001
 
-    in_tolerance = lambda x, y: pipe(
+    tolerance = lambda x, y: pipe(
        square,
        partial(flip(sub), x),
        abs
     )(y)
 
-    approx_ = lambda x, y: y if in_tolerance(x,y) < variance else pipe(
+    approx_ = lambda x, y: y if tolerance(x,y) < variance else pipe(
         partial(truediv, x),
         partial(avg, y),
         partial(approx_, x),
