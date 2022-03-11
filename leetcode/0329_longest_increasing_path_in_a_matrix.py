@@ -1,36 +1,40 @@
+# from functools import cache
+
+# A simple reimplementation of the @cache decorator for educational purposes
+def _cache(fn):
+    cache = {}
+
+    def cache_wrapper(*args):
+        key = args
+        if key not in cache:
+            cache[key] = fn(*args)
+        return cache[key]
+
+    return cache_wrapper
+
+
 class Solution:
     def longestIncreasingPath(self, matrix):
-        if len(matrix) == 0:
-            return 0
+        @_cache
+        def dfs(i, j):
+            max_result = 0
+            for _i, _j in [[i,j+1], [i,j-1], [i+1,j], [i-1,j]]:
+                if 0 <= _i < len(matrix) and 0 <= _j < len(matrix[0]) and matrix[_i][_j] > matrix[i][j]:
+                    max_result = max(dfs(_i, _j) + 1, max_result)
 
-        cache = [[0] * len(matrix[0]) for x in range(len(matrix))]
+            return max_result
 
-        ans = 0
-        for i, row in enumerate(matrix):
-            for j, _ in enumerate(row):
-                ans = max(ans, self.dfs(matrix, i, j, cache))
-        return ans
 
-    def dfs(self, matrix, i, j, cache):
-        if cache[i][j] != 0:
-            return cache[i][j]
+        return max([dfs(i, j) + 1 for i in range(len(matrix)) for j in range(len(matrix[0]))])
 
-        for row_shift, col_shift in [(0,1), (1,0), (0, -1), (-1, 0)]:
-            next_i = i + row_shift
-            next_j = j + col_shift
 
-            if (0 <= next_i < len(matrix)
-                    and 0 <= next_j < len(matrix[0])
-                    and matrix[next_i][next_j] > matrix[i][j]):
-                cache[i][j] = max(cache[i][j], self.dfs(matrix, next_i, next_j, cache))
+def test_happy_path():
+    nums = [
+      [3,4,5],
+      [3,2,6],
+      [2,2,1]
+    ]
+    assert Solution().longestIncreasingPath(nums) == 4
 
-        return cache[i][j] + 1
-
-nums = [
-  [3,4,5],
-  [3,2,6],
-  [2,2,1]
-]
-sol = Solution()
-print(sol.longestIncreasingPath(nums))
-
+if __name__ == '__main__':
+    test_happy_path()
