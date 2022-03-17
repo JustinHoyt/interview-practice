@@ -5,11 +5,13 @@ class Solution:
             if len(sofar) == k:
                 combinations.append(sofar[:])
                 return
+            if idx > n:
+                return
 
-            for i in range(idx, n+1):
-                sofar.append(i)
-                generate_combinations(i + 1, sofar)
-                sofar.pop()
+            generate_combinations(idx + 1, sofar)
+            sofar.append(idx)
+            generate_combinations(idx + 1, sofar)
+            sofar.pop()
 
         generate_combinations(1, [])
         return combinations

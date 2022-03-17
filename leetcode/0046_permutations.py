@@ -1,25 +1,21 @@
-from typing import *
-
 class Solution:
-    def permute(self, nums: List[int]) -> List[List[int]]:
-        def swap(i, j):
-            nums[i], nums[j] = nums[j], nums[i]
+    def permute(self, nums: list[int]) -> list[list[int]]:
+        perms: list[list[int]] = []
+        if len(nums) == 0:
+            return perms
 
-        def permute_rec(idx = 0) -> None:
+        def generate_perms(idx):
             if idx == len(nums):
-                results.append(nums.copy())
+                perms.append(nums[:])
 
             for i in range(idx, len(nums)):
-                swap(idx, i)
-                permute_rec(idx + 1)
-                swap(idx, i)
+                nums[idx], nums[i] = nums[i], nums[idx]
+                generate_perms(idx+1)
+                nums[idx], nums[i] = nums[i], nums[idx]
 
-        results: List[List[int]] = []
+        generate_perms(0)
+        return perms
 
-        if len(nums) == 0:
-            return []
-        permute_rec()
-        return results
 
 
 def test_happy_path():
