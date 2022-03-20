@@ -1,7 +1,7 @@
-from typing import *
+from itertools import starmap
 
 class Solution:
-    def numIslands(self, grid: List[List[str]]) -> int:
+    def numIslands(self, grid: list[list[str]]) -> int:
         num_islands = 0
         def mark_island(i, j):
             if (
@@ -9,10 +9,9 @@ class Solution:
                 0 <= j < len(grid[0]) and
                 grid[i][j] == '1'
             ):
-                grid[i][j] = 0
-                for i_offset, j_offset in [[-1,0], [0,-1], [1,0], [0,1]]:
-                    mark_island(i + i_offset,j + j_offset)
-            
+                grid[i][j] = '0'
+                list(starmap(mark_island, [(i+1, j), (i-1, j), (i, j+1), (i, j-1)]))
+
 
         for i, row in enumerate(grid):
             for j, cell in enumerate(row):

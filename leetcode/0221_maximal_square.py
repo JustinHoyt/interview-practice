@@ -1,9 +1,12 @@
+from itertools import starmap
+
+
 class Solution:
     def maximalSquare(self, matrix):
         memo = {}
         best = 0
 
-        def dfs(i, j):
+        def _maximal_square(i=0, j=0):
             nonlocal best
             if i == len(matrix) or j == len(matrix[i]):
                 return 0
@@ -11,7 +14,7 @@ class Solution:
             if (i, j) in memo:
                 return memo[(i, j)]
 
-            lowest_neighbor = min(dfs(i+1, j), dfs(i, j+1), dfs(i+1, j+1))
+            lowest_neighbor = min(starmap(_maximal_square, [(i+1, j), (i, j+1), (i+1, j+1)]))
 
             curr = 0
             if matrix[i][j] == '1':
@@ -21,7 +24,7 @@ class Solution:
             memo[(i, j)] = curr
             return curr
 
-        dfs(0, 0)
+        _maximal_square()
         return best ** 2
 
 matrix = [
