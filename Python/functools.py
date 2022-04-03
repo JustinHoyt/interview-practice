@@ -81,7 +81,7 @@ def test_pipe():
 
 def test_apply_n():
     def repeat(obj, n):
-        return [obj for _ in range(n)]
+        return (obj for _ in range(n))
 
 
     def apply_n_recursive(fn, n, x):
@@ -92,18 +92,20 @@ def test_apply_n():
         return reduce(pipe, repeat(fn, n))
 
 
-    def grow_one_year(yearly_savings, x):
-        return x * 1.07 + yearly_savings
+    def grow_one_year(yearly_savings, growth_rate, x):
+        return x * growth_rate + yearly_savings
 
 
-    def investment_return(investment, years, yearly_savings):
+    def investment_return(investment, years, yearly_savings, growth_rate):
+        grow_investment = partial(grow_one_year, yearly_savings, growth_rate)
+
         return pipe(
-            apply_n(partial(grow_one_year, yearly_savings), years),
+            apply_n(grow_investment, years),
             "${:,.2f}".format,
         )(investment)
 
 
-    assert investment_return(10000, 40, 5000) == "$1,147,920.14"
+    assert investment_return(10000, 40, 5000, 1.07) == "$1,147,920.14"
 
 
 def test_decorator():
