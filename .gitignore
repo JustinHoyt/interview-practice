@@ -4,4 +4,5 @@ tag*
 node_modules
 .vim
 .vscode
+bin
 
