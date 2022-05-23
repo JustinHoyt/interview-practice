@@ -56,7 +56,7 @@ public class SwapPairsInt {
             .asList(args)
             .stream()
             .mapToInt(Integer::parseInt)
-            .map(SwapPairsInt::reversePairsInt)
+            .map(SwapPairsInt::reversePairsIntWithClass)
             .forEach(System.out::println);
     }
 
