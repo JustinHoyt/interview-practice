@@ -7,34 +7,39 @@ import org.junit.Test;
 public class SwapPairsInt {
 
     public static int reversePairsIntWithClass(int num) {
-        int result = 0;
-        int i = 0;
         Digits digits = new Digits(num);
+        Digits result = new Digits(0);
 
-        while (digits.getNumber() > 10) {
-            result += digits.pop() * Math.pow(10, i+1);
-            result += digits.pop() * Math.pow(10, i);
-            i += 2;
+        while (digits.getLength() > 1) {
+            int right = digits.pop();
+            int left = digits.pop();
+
+            result.pushLeft(left);
+            result.pushLeft(right);
         }
 
-        if (num > 0) {
-            result += digits.pop() * Math.pow(10, i);
+        if (digits.getLength() == 1) {
+            result.pushLeft(digits.pop());
         }
 
-        return result;
+        return result.getNumber();
     }
 
     public static int reversePairsInt(int num) {
         int result = 0;
         int i = 0;
         while (num > 10) {
+            // Get the right most digit
             int right_digit = num % 10;
             num = num / 10;
 
+            // Get the next right most digit
             int left_digit = num % 10;
             num = num / 10;
 
+            // Push the digit to the left most spot in the result int
             result += left_digit * Math.pow(10, i++);
+            // Push the digit to the left most spot in the result int
             result += right_digit * Math.pow(10, i++);
         }
 
@@ -57,22 +62,22 @@ public class SwapPairsInt {
 
     @Test
     public void testEvenNumberOfLettersWithClass() {
-        assertEquals(reversePairsIntWithClass(1234), 2143);
+        assertEquals(2143, reversePairsIntWithClass(1234));
     }
 
     @Test
     public void testOddNumberOfLettersWithClass() {
-        assertEquals(reversePairsIntWithClass(12345), 13254);
+        assertEquals(13254, reversePairsIntWithClass(12345));
     }
 
     @Test
     public void testEvenNumberOfLetters() {
-        assertEquals(reversePairsInt(1234), 2143);
+        assertEquals(2143, reversePairsInt(1234));
     }
 
     @Test
     public void testOddNumberOfLetters() {
-        assertEquals(reversePairsInt(12345), 13254);
+        assertEquals(13254, reversePairsInt(12345));
     }
 }
 
@@ -87,8 +92,12 @@ class Digits {
         return num;
     }
 
-    public int peak() {
-        return this.num % 10;
+    public int getLength() {
+        return (int) Math.ceil(Math.log10(this.num + 1));
+    }
+
+    public void pushLeft(int digit) {
+        this.num += digit * Math.pow(10, this.getLength());
     }
 
     public int pop() {
@@ -96,5 +105,4 @@ class Digits {
         this.num = this.num / 10;
         return digit;
     }
-
 }
