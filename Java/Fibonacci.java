@@ -14,23 +14,25 @@ public class Fibonacci {
     static Function<Integer, Integer> fib;
 
     public static int fibonacci(int num) {
-        Map<Integer, Integer> memo = new HashMap<>();
+        var closure = new Object() {
+            Function<Integer, Integer> fib;
+            Map<Integer, Integer> memo = new HashMap<>();
+        };
 
-        fib = n -> {
+        closure.fib = n -> {
             if (n <= 2) {
                 return 1;
             }
 
-            if (memo.containsKey(n)) {
-                return memo.get(n);
+            if (closure.memo.containsKey(n)) {
+                return closure.memo.get(n);
             }
 
-            int result = fib.apply(n-1) + fib.apply(n-2);
-            memo.put(n, result);
-            return result;
+            closure.memo.put(n, closure.fib.apply(n-1) + closure.fib.apply(n-2));
+            return closure.memo.get(n);
         };
 
-        return fib.apply(num);
+        return closure.fib.apply(num);
     }
 
     public static void main(String args[]) {
