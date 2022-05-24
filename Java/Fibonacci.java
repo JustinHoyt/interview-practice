@@ -16,14 +16,13 @@ public class Fibonacci {
     public static int fibonacci(int num) {
         var closure = new Object() {
             Function<Integer, Integer> fib;
-            Map<Integer, Integer> memo = new HashMap<>();
+            Map<Integer, Integer> memo = new HashMap<>(Map.of(
+                1, 1,
+                2, 1
+            ));
         };
 
         closure.fib = n -> {
-            if (n <= 2) {
-                return 1;
-            }
-
             if (closure.memo.containsKey(n)) {
                 return closure.memo.get(n);
             }

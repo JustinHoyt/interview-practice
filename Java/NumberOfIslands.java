@@ -21,22 +21,15 @@ public class NumberOfIslands {
             int i = point[0];
             int j = point[1];
 
-            if (
-                0 <= i && i < grid.length &&
+            if (0 <= i && i < grid.length &&
                 0 <= j && j < grid[0].length &&
                 grid[i][j] == 1 &&
                 closure.visited[i][j] == 0
             ) {
                 closure.visited[i][j] = 1;
-
-                List.of(new int[][] { {i+1, j}, {i-1, j}, {i, j+1}, {i, j-1} })
-                    .stream()
-                    .forEach(closure.markIsland::accept);
-
-                // for (int[] _point : new int[][] { {i+1, j}, {i-1, j}, {i, j+1}, {i, j-1} }) {
-                //     closure.markIsland.accept(_point);
-                // }
-
+                for (int[] neighborPoint : new int[][] { {i+1, j}, {i-1, j}, {i, j+1}, {i, j-1}}) {
+                    closure.markIsland.accept(neighborPoint);
+                }
             }
         };
 
