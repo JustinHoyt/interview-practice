@@ -11,8 +11,6 @@ import java.util.function.Function;
 import org.junit.Test;
 
 public class Fibonacci {
-    static Function<Integer, Integer> fib;
-
     public static int fibonacci(int num) {
         var closure = new Object() {
             Function<Integer, Integer> fib;
