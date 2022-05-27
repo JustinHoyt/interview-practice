@@ -1,12 +1,16 @@
 import static org.junit.Assert.assertEquals;
+import static java.util.stream.IntStream.range;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.junit.Test;
 
@@ -33,17 +37,18 @@ public class NumberOfIslands {
             }
         };
 
-        int numIslands = 0;
+        BiPredicate<Integer, Integer> isLand = (i, j) -> grid[i][j] == 1;
+        BiPredicate<Integer, Integer> isUnvisited = (i, j) -> closure.visited[i][j] == 0;
 
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
-                if (grid[i][j] == 1 && closure.visited[i][j] == 0) {
+        return range(0, grid.length).flatMap(i ->
+            range(0, grid[0].length).map(j -> {
+                if (isLand.and(isUnvisited).test(i, j)) {
                     closure.markIsland.accept(new int[] {i, j});
-                    numIslands++;
+                    return 1;
                 }
-            }
-        }
-        return numIslands;
+                return 0;
+            })
+        ).sum();
     }
 
     @Test

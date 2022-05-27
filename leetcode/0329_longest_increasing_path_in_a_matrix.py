@@ -19,7 +19,11 @@ class Solution:
         def dfs(i, j):
             max_result = 0
             for _i, _j in [[i,j+1], [i,j-1], [i+1,j], [i-1,j]]:
-                if 0 <= _i < len(matrix) and 0 <= _j < len(matrix[0]) and matrix[_i][_j] > matrix[i][j]:
+                if (
+                    0 <= _i < len(matrix) and
+                    0 <= _j < len(matrix[0]) and
+                    matrix[_i][_j] > matrix[i][j]
+                ):
                     max_result = max(dfs(_i, _j) + 1, max_result)
 
             return max_result

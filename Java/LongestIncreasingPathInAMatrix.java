@@ -1,9 +1,10 @@
+import static java.lang.Math.max;
+import static java.util.stream.IntStream.range;
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.stream.IntStream;
 
 import org.junit.Test;
 
@@ -28,23 +29,23 @@ public class LongestIncreasingPathInAMatrix {
                     0 <= _j && _j < grid[0].length &&
                     grid[_i][_j] > grid[i][j]
                 ) {
-                    maxResult = Math.max((closure.dfs.apply(_i, _j) + 1), maxResult);
+                    maxResult = max((closure.dfs.apply(_i, _j) + 1), maxResult);
                 }
             }
             closure.memo.put(key, maxResult);
             return maxResult;
         };
 
-        return IntStream.range(0, grid.length).map(i ->
-            IntStream.range(0, grid[0].length).map(j ->
+        return range(0, grid.length).flatMap(i ->
+            range(0, grid[0].length).map(j ->
                 closure.dfs.apply(i, j) + 1
-            ).max().getAsInt()
+            )
         ).max().getAsInt();
 
     }
 
     @Test
-    public void testFib() {
+    public void testLongestIncreasingPath() {
         assertEquals(4, longestIncreasingPathInAMatrix(new int[][]{
             {3, 4, 5},
             {3, 2, 6},

@@ -1,4 +1,6 @@
 import static org.junit.Assert.assertEquals;
+import static java.math.BigInteger.ONE;
+import static java.math.BigInteger.TWO;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -11,16 +13,13 @@ import java.util.function.Function;
 
 import org.junit.Test;
 
-public class Fibonacci {
+public class FibonacciBigInt {
     public static BigInteger fibonacci(int num) {
-        var one = BigInteger.ONE;
-        var two = BigInteger.TWO;
-
         var closure = new Object() {
             Function<BigInteger, BigInteger> fib;
             Map<BigInteger, BigInteger> memo = new HashMap<>(Map.of(
-                one, one,
-                two, one
+                ONE, ONE,
+                TWO, ONE
             ));
         };
 
@@ -29,7 +28,7 @@ public class Fibonacci {
                 return closure.memo.get(n);
             }
 
-            closure.memo.put(n, closure.fib.apply(n.subtract(one)).add(closure.fib.apply(n.subtract(two))));
+            closure.memo.put(n, closure.fib.apply(n.subtract(ONE)).add(closure.fib.apply(n.subtract(TWO))));
             return closure.memo.get(n);
         };
 
