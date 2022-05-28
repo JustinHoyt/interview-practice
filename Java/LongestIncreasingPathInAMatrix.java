@@ -14,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.Test;
 
+record Point(int row, int col) {};
+
 public class LongestIncreasingPathInAMatrix {
 
     public static int longestIncreasingPathInAMatrix(int[][] grid) {
@@ -23,13 +25,13 @@ public class LongestIncreasingPathInAMatrix {
         };
 
         closure.search = current -> {
-            Predicate<Point> isInBounds = next -> 0 <= next.row && next.row < grid.length && 0 <= next.col && next.col < grid[0].length;
-            Predicate<Point> isLargerThanCurrentPoint = next -> grid[next.row][next.col] > grid[current.row][current.col];
+            Predicate<Point> isInBounds = next -> 0 <= next.row() && next.row() < grid.length && 0 <= next.col() && next.col() < grid[0].length;
+            Predicate<Point> isLargerThanCurrentPoint = next -> grid[next.row()][next.col()] > grid[current.row()][current.col()];
             Point[] neighbors = new Point[] {
-                new Point(current.row, current.col+1),
-                new Point(current.row, current.col-1),
-                new Point(current.row+1, current.col),
-                new Point(current.row-1, current.col)
+                new Point(current.row(), current.col()+1),
+                new Point(current.row(), current.col()-1),
+                new Point(current.row()+1, current.col()),
+                new Point(current.row()-1, current.col())
             };
 
             return closure.memo.computeIfAbsent(current.toString(), __ ->
@@ -41,7 +43,7 @@ public class LongestIncreasingPathInAMatrix {
                             : 0
                     )
                     .max()
-                    .getAsInt()
+                    .orElse(0)
             );
         };
 
@@ -49,7 +51,7 @@ public class LongestIncreasingPathInAMatrix {
             range(0, grid[0].length).map(col ->
                 closure.search.apply(new Point(row, col)) + 1
             )
-        ).max().getAsInt();
+        ).max().orElse(0);
     }
 
     @Test
@@ -59,20 +61,5 @@ public class LongestIncreasingPathInAMatrix {
             {3, 2, 6},
             {2, 2, 1},
         }));
-    }
-}
-
-class Point {
-    public int row;
-    public int col;
-
-    public Point(int row, int col) {
-        this.row = row;
-        this.col = col;
-    }
-
-    @Override
-    public String toString() {
-        return this.row + "," + this.col;
     }
 }
