@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map.Entry;
 import java.util.function.Function;
 
@@ -14,20 +15,13 @@ public class Fibonacci {
     public static int fibonacci(int num) {
         var closure = new Object() {
             Function<Integer, Integer> fib;
-            Map<Integer, Integer> memo = new HashMap<>(Map.of(
-                1, 1,
-                2, 1
-            ));
+            ConcurrentHashMap<Integer, Integer> memo = new ConcurrentHashMap<>(num);
         };
 
-        closure.fib = n -> {
-            if (closure.memo.containsKey(n)) {
-                return closure.memo.get(n);
-            }
+        closure.memo.put(1, 1);
+        closure.memo.put(2, 1);
 
-            closure.memo.put(n, closure.fib.apply(n-1) + closure.fib.apply(n-2));
-            return closure.memo.get(n);
-        };
+        closure.fib = n -> closure.memo.computeIfAbsent(n, x -> closure.fib.apply(n-1) + closure.fib.apply(n-2));
 
         return closure.fib.apply(num);
     }
