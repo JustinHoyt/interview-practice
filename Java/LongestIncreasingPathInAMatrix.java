@@ -5,7 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.function.BiPredicate;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,22 +15,29 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.junit.Test;
 
 public class LongestIncreasingPathInAMatrix {
+
     public static int longestIncreasingPathInAMatrix(int[][] grid) {
         var closure = new Object() {
-            BiFunction<Integer, Integer, Integer> dfs;
+            Function<Point, Integer> search;
             ConcurrentHashMap<String, Integer> memo = new ConcurrentHashMap<>(grid.length * grid[0].length);
         };
 
+        closure.search = current -> {
+            Predicate<Point> isInBounds = next -> 0 <= next.row && next.row < grid.length && 0 <= next.col && next.col < grid[0].length;
+            Predicate<Point> isLargerThanCurrentPoint = next -> grid[next.row][next.col] > grid[current.row][current.col];
+            Point[] neighbors = new Point[] {
+                new Point(current.row, current.col+1),
+                new Point(current.row, current.col-1),
+                new Point(current.row+1, current.col),
+                new Point(current.row-1, current.col)
+            };
 
-        closure.dfs = (i, j) -> {
-            BiPredicate<Integer, Integer> inBounds = (_i, _j) -> 0 <= _i && _i < grid.length && 0 <= _j && _j < grid[0].length;
-            BiPredicate<Integer, Integer> largerThanPreviousPoint = (_i, _j) -> grid[_i][_j] > grid[i][j];
-            return closure.memo.computeIfAbsent(i + "," + j, __ ->
-                List.of(new int[][] { {i, j+1}, {i, j-1}, {i+1, j}, {i-1, j} })
+            return closure.memo.computeIfAbsent(current.toString(), __ ->
+                List.of(neighbors)
                     .stream()
                     .mapToInt(neighbor ->
-                        (inBounds.and(largerThanPreviousPoint).test(neighbor[0], neighbor[1]))
-                            ? closure.dfs.apply(neighbor[0], neighbor[1]) + 1
+                        (isInBounds.and(isLargerThanCurrentPoint).test(neighbor))
+                            ? closure.search.apply(neighbor) + 1
                             : 0
                     )
                     .max()
@@ -36,12 +45,11 @@ public class LongestIncreasingPathInAMatrix {
             );
         };
 
-        return range(0, grid.length).flatMap(i ->
-            range(0, grid[0].length).map(j ->
-                closure.dfs.apply(i, j) + 1
+        return range(0, grid.length).flatMap(row ->
+            range(0, grid[0].length).map(col ->
+                closure.search.apply(new Point(row, col)) + 1
             )
         ).max().getAsInt();
-
     }
 
     @Test
@@ -54,3 +62,17 @@ public class LongestIncreasingPathInAMatrix {
     }
 }
 
+class Point {
+    public int row;
+    public int col;
+
+    public Point(int row, int col) {
+        this.row = row;
+        this.col = col;
+    }
+
+    @Override
+    public String toString() {
+        return this.row + "," + this.col;
+    }
+}
