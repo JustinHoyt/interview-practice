@@ -16,7 +16,7 @@ describe("3 sum", () => {
     expect(
       threeSum([-1, 0, 1, 2, -1, -4]).map(sort),
     ).toEqual(
-      [[-1, 0, 1], [-1, -1, 2]].map(sort),
+      [[-1, -1, 2], [-1, 0, 1]].map(sort),
     );
   });
 });

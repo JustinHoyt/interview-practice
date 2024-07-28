@@ -15,6 +15,16 @@ type Triplet = [number, number, number];
 type TripletStr = `${number},${number},${number}`;
 
 export function threeSum(nums: number[]): number[][] {
+  const temp = nums.sort((a, b) => a - b);
+  nums = [];
+  let count = new DefaultMap<number, number>(() => 0);
+  for (const val of temp) {
+    if (count.get(val) >= 3) continue;
+
+    count.set(val, count.get(val) + 1);
+    nums.push(val);
+  }
+
   const valToIdxs = new DefaultMap<number, number[]>(() => []);
   nums.forEach((v, i) => valToIdxs.get(v).push(i));
 
