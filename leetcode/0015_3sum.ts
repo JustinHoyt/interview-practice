@@ -46,13 +46,13 @@ export function threeSum(nums: number[]): number[][] {
     const twoSumMatches = twoSum(-target, i);
 
     for (const match of twoSumMatches) {
-      const completeMatch = [match[0], match[1], target]
-        .sort((a, b) => a - b) as Triplet;
-      const matchStr = completeMatch.join(",") as TripletStr;
+      match.push(target);
+      match.sort((a, b) => a - b);
+      const matchStr = match.join(",") as TripletStr;
       if (matches.has(matchStr)) continue;
 
-      matches.add(completeMatch.join(",") as TripletStr);
-      matchesArr.push(completeMatch);
+      matches.add(matchStr);
+      matchesArr.push(match);
     }
   }
 
