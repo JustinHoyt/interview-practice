@@ -12,11 +12,19 @@ describe("3 sum", () => {
     );
   });
 
-  it("should use subtractive form for fours and nines", () => {
+  it("should find multiple matches", () => {
     expect(
-      threeSum([-1, 0, 1, 2, -1, -4]).map(sort),
+      threeSum([-1, 0, 1, 2, -1, -4, -1, 0, 1, 2, -1, -4]).map(sort),
     ).toEqual(
-      [[-1, -1, 2], [-1, 0, 1]].map(sort),
+      [[-4, 2, 2], [-1, -1, 2], [-1, 0, 1]].map(sort),
+    );
+  });
+
+  it("should pass speed test", () => {
+    expect(
+      threeSum(Array(3000).fill(0)),
+    ).toEqual(
+      [[0, 0, 0]],
     );
   });
 });

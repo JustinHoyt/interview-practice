@@ -11,38 +11,31 @@ class DefaultMap<K, V> extends Map<K, V> {
   }
 }
 
-type Triplet = [number, number, number];
 type TripletStr = `${number},${number},${number}`;
 
-export function threeSum(nums: number[]): number[][] {
-  const temp = nums.sort((a, b) => a - b);
-  nums = [];
+function threeSum(nums: number[]): number[][] {
+  nums.sort((a, b) => a - b);
+  const resNums: number[] = [];
   let count = new DefaultMap<number, number>(() => 0);
-  for (const val of temp) {
+  for (const val of nums) {
     if (count.get(val) >= 3) continue;
 
     count.set(val, count.get(val) + 1);
-    nums.push(val);
+    resNums.push(val);
   }
 
   const valToIdxs = new DefaultMap<number, number[]>(() => []);
-  nums.forEach((v, i) => valToIdxs.get(v).push(i));
+  resNums.forEach((v, i) => valToIdxs.get(v).push(i));
 
   function twoSum(target: number, skipIdx: number): Array<[number, number]> {
     const matches = Array<[number, number]>();
 
-    for (const [i, num] of nums.entries()) {
-      const complementVal = target - num;
-      const complementIdxs = valToIdxs.get(complementVal);
-
+    for (const [i, num] of resNums.entries()) {
       if (i === skipIdx) continue;
-      if (complementIdxs == null) continue;
 
-      if (
-        complementIdxs.every(
-          (compIdx) => compIdx === i || compIdx === skipIdx,
-        )
-      ) continue;
+      const complementVal = target - num + 0;
+      const complementIdxs = valToIdxs.get(complementVal);
+      if (complementIdxs.every((j) => j === i || j === skipIdx)) continue;
 
       matches.push([num, complementVal]);
     }
@@ -50,21 +43,23 @@ export function threeSum(nums: number[]): number[][] {
     return matches;
   }
 
-  const matches = new Set<TripletStr>();
-  const matchesArr: number[][] = [];
-  for (const [i, target] of nums.entries()) {
+  const matchSet = new Set<TripletStr>();
+  const matchArr: number[][] = [];
+  for (const [i, target] of resNums.entries()) {
     const twoSumMatches = twoSum(-target, i);
 
     for (const match of twoSumMatches) {
       match.push(target);
       match.sort((a, b) => a - b);
       const matchStr = match.join(",") as TripletStr;
-      if (matches.has(matchStr)) continue;
+      if (matchSet.has(matchStr)) continue;
 
-      matches.add(matchStr);
-      matchesArr.push(match);
+      matchSet.add(matchStr);
+      matchArr.push(match);
     }
   }
 
-  return matchesArr;
+  return matchArr;
 }
+
+export { threeSum };
